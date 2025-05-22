@@ -1,0 +1,4 @@
+:host {
+    @apply flex;
+    @apply flex-1;
+}

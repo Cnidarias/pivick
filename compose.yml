@@ -1,0 +1,32 @@
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    environment:
+      CLICKHOUSE_DB: database
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+      CLICKHOUSE_PASSWORD: cnidarias
+      CLICKHOUSE_USER: cnidarias
+    volumes:
+      - "./clickhouse/init.sh:/docker-entrypoint-initdb.d/init.sh"
+      - "./.data/ch_data:/var/lib/clickhouse"
+      - "./.data/ch_logs:/var/log/clickhouse-server"
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+  cube:
+    image: cubejs/cube
+    ports:
+      - "4000:4000"
+    environment:
+      CUBEJS_DEV_MODE: true
+      CUBEJS_DB_TYPE: clickhouse
+      CUBEJS_DB_HOST: clickhouse
+      CUBEJS_DB_NAME: default
+      CUBEJS_DB_USER: cnidarias
+      CUBEJS_DB_PASS: cnidarias
+    volumes:
+      - "./cube/conf:/cube/conf"

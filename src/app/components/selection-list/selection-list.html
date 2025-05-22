@@ -1,0 +1,11 @@
+<p-listbox [options]="selectedRows" [dragdrop]="true">
+  <ng-template #item let-row> {{getLabel(row)}} </ng-template>
+</p-listbox>
+
+<p-listbox [options]="selectedColumns" [dragdrop]="true">
+  <ng-template #item let-col> {{getLabel(col)}} </ng-template>
+</p-listbox>
+
+<p-listbox [options]="selectedMeasures" [dragdrop]="true">
+  <ng-template #item let-measure> {{getLabel(measure)}} </ng-template>
+</p-listbox>

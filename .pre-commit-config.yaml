@@ -3,11 +3,11 @@ repos:
       rev: 'v4.0.0-alpha.8' # Use the sha / tag you want to point at
       hooks:
           - id: prettier
-            types_or: [css, javascript, ts, scss, json, html]
+            types_or: [css, javascript, ts, scss, json, html, yaml]
 
     - repo: https://github.com/astral-sh/ruff-pre-commit
       rev: v0.12.2
       hooks:
           - id: ruff-check
-            args: [ --fix ]
+            args: [--fix]
           - id: ruff-format

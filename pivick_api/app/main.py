@@ -25,4 +25,4 @@ app = FastAPI(
 v1_router = APIRouter()
 v1_router.include_router(schema.router, prefix="/schema", tags=["schema"])
 
-app.include_router(v1_router)
+app.include_router(v1_router, prefix="/v1")

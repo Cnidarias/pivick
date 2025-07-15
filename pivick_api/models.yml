@@ -1,0 +1,38 @@
+name: SalesAnalysis
+fact_source: sales
+joins:
+    - type: left
+      left_table: sales
+      right_table: products
+      condition: sales.product_id = products.product_id
+    - type: left
+      left_table: sales
+      right_table: customers
+      condition: sales.customer_id = customers.customer_id
+dimensions:
+    - name: Product
+      table: products
+      attributes:
+          - name: ProductName
+            column: name
+          - name: ProductCategory
+            column: category
+    - name: Customer
+      table: customers
+      attributes:
+          - name: CustomerName
+            column: name
+          - name: CustomerRegion
+            column: region
+    - name: Time
+      table: sales # Dimension attributes can come from the fact table
+      attributes:
+          - name: SaleTimestamp
+            column: timestamp
+measures:
+    - name: TotalSales
+      column: amount
+      agg: SUM
+    - name: NumberOfSales
+      column: sale_id
+      agg: COUNT

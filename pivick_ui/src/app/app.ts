@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { PivickLayoutComponent } from './pivick-layout/pivick-layout';
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet],
     templateUrl: './app.html',
-    styleUrl: './app.css',
+    styleUrls: ['./app.scss'],
+    standalone: true,
+    imports: [PivickLayoutComponent],
 })
-export class App {
-    protected title = 'Cnidarias Pivick';
+export class AppComponent {
+    title = 'pivick-ui';
 }

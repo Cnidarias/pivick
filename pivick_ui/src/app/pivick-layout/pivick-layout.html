@@ -1,0 +1,19 @@
+<div class="rectangle">
+    <div class="pivick-dim-container" mwlResizable [style.width]="dimContainerWidth" [enableGhostResize]="true" (resizeEnd)="onResizeEnd('dim', $event)">
+        <app-dimension-list style=""></app-dimension-list>
+        <div class="resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
+    </div>
+    <div class="pivick-sel-container" mwlResizable [style.width]="selContainerWidth" [enableGhostResize]="true" (resizeEnd)="onResizeEnd('sel', $event)">
+        <app-selection-list></app-selection-list>
+        <div class="resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
+    </div>
+    <div class="pivick-content">
+        <p-menubar [model]="[]">
+            <ng-template #end>
+                <p-button icon="pi pi-sun" aria-label="Toggle Light Mode" (onClick)="toggleDarkMode()" />
+            </ng-template>
+        </p-menubar>
+
+        <app-pivick-content></app-pivick-content>
+    </div>
+</div>

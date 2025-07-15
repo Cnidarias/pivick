@@ -1,4 +1,4 @@
 import { Routes } from '@angular/router';
-import { PivickComponent } from './pages/pivick/pivick.component';
+import { Pivick } from './pages/pivick/pivick';
 
-export const routes: Routes = [{ path: '', component: PivickComponent }];
+export const routes: Routes = [{ path: '**', component: Pivick }];

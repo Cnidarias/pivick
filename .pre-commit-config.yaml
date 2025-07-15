@@ -5,13 +5,9 @@ repos:
           - id: prettier
             types_or: [css, javascript, ts, scss, json, html]
 
-    - repo: https://github.com/psf/black
-      rev: 22.6.0
+    - repo: https://github.com/astral-sh/ruff-pre-commit
+      rev: v0.12.2
       hooks:
-          - id: black
-            args: [-l 120]
-
-    - repo: https://github.com/charliermarsh/ruff-pre-commit
-      rev: 'v0.0.262'
-      hooks:
-          -   id: ruff
+          - id: ruff-check
+            args: [ --fix ]
+          - id: ruff-format

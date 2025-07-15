@@ -1,9 +1,10 @@
 [project]
-name = "pivick-api"
+name = "PivickAPI"
 version = "0.1.0"
-description = "Add your description here"
+description = "Rest API for the Pivick"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi[standard]>=0.115.12",
+    "fastapi[standard]>=0.112.1",
 ]
+

@@ -1,38 +1,28 @@
-import os
-from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
 from fastapi.routing import APIRouter
-from starlette.middleware.cors import CORSMiddleware
 
-from .routes.v1 import pivick
+from routes.v1 import schema
 
+description = """
+API for managing schemas and executing pivot type queries against a database
 
-@asynccontextmanager
-async def lifespan(_: FastAPI):
-    yield
-
+* * * * * * * * * *
+### Copyright
+Pascal Roessner
+"""
 
 app = FastAPI(
-    root_path=os.getenv("PIVICK_API_ROOT_PATH", "/pivick-api"),
+    root_path="/pivick-api",
     title="Pivick Rest API",
+    description=description,
     contact={
         "name": "Pascal Roessner",
         "url": "https://cnidarias.net",
     },
     version="1",
-    lifespan=lifespan,
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-    allow_credentials=True,
-)
+v1_router = APIRouter()
+v1_router.include_router(schema.router, prefix="/schema", tags=["schema"])
 
-v1_api_router = APIRouter()
-v1_api_router.include_router(pivick.router, prefix="/pivick", tags=["pivick"])
-
-app.include_router(v1_api_router, prefix="/v1")
+app.include_router(v1_router)

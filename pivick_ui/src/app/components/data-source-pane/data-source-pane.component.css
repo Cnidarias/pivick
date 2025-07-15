@@ -1,3 +1,30 @@
 .data-source-pane-container {
     padding: 1rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.data-source-pane-container h3,
+.data-source-pane-container h4 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+.item-list {
+    display: grid;
+    grid-template-columns: 1fr; /* Each item on its own line */
+    gap: 0.5rem; /* Spacing between items */
+    margin-bottom: 1rem;
+}
+
+/* Style for PrimeNG chips to look interactable */
+:host ::ng-deep .p-chip {
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    width: fit-content; /* Ensure chip only takes necessary width */
+}
+
+:host ::ng-deep .p-chip:hover {
+    background-color: var(--surface-200); /* Use PrimeNG theme variable for hover */
 }

@@ -1,21 +1,15 @@
 <div class="data-source-pane-container">
     <h3>Data Models</h3>
-    <ul *ngIf="models.length > 0; else loading">
-        <li *ngFor="let model of models">
-            <h4>{{ model.name }}</h4>
-            <h5>Dimensions</h5>
-            <ul>
-                <li *ngFor="let dim of model.dimensions">
-                    {{ dim.name }}
-                </li>
-            </ul>
-            <h5>Measures</h5>
-            <ul>
-                <li *ngFor="let measure of model.measures">
-                    {{ measure.name }}
-                </li>
-            </ul>
-        </li>
-    </ul>
+    <div *ngIf="dimensions.length > 0 || measures.length > 0; else loading">
+        <h4>Dimensions</h4>
+        <div class="item-list">
+            <p-chip *ngFor="let dim of dimensions" label="{{ dim.name }}" styleClass="p-mr-2 p-mb-2"></p-chip>
+        </div>
+
+        <h4>Measures</h4>
+        <div class="item-list">
+            <p-chip *ngFor="let measure of measures" label="{{ measure.name }}" styleClass="p-mr-2 p-mb-2"></p-chip>
+        </div>
+    </div>
     <ng-template #loading>Loading models...</ng-template>
 </div>

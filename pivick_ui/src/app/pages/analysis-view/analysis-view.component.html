@@ -1,9 +1,44 @@
-<div class="analysis-view-container">
+<div class="analysis-view-container" cdkDropListGroup>
     <div class="data-source-pane">
-        <app-data-source-pane></app-data-source-pane>
+        <app-data-source-pane (dimensionsListReady)="onDimensionsListReady($event)" (measuresListReady)="onMeasuresListReady($event)"></app-data-source-pane>
     </div>
     <div class="main-content">
-        <div class="layout-shelves">Layout Shelves</div>
+        <div class="layout-shelves">
+            <div
+                class="shelf"
+                cdkDropList
+                #rowsList="cdkDropList"
+                [cdkDropListData]="rows"
+                (cdkDropListDropped)="drop($event)"
+                [cdkDropListConnectedTo]="[columnsList, dimensionsSourceList, measuresSourceList]"
+            >
+                <h4>Rows</h4>
+                <ol>
+                    @for (item of rows; track item) {
+                        <li cdkDrag [cdkDragData]="item">
+                            {{ item.item.name }}
+                        </li>
+                    }
+                </ol>
+            </div>
+            <div
+                class="shelf"
+                cdkDropList
+                #columnsList="cdkDropList"
+                [cdkDropListData]="columns"
+                (cdkDropListDropped)="drop($event)"
+                [cdkDropListConnectedTo]="[rowsList, dimensionsSourceList, measuresSourceList]"
+            >
+                <h4>Columns</h4>
+                <ol>
+                    @for (item of columns; track item) {
+                        <li cdkDrag [cdkDragData]="item">
+                            {{ item.item.name }}
+                        </li>
+                    }
+                </ol>
+            </div>
+        </div>
         <div class="canvas">
             <div echarts [options]="chartOptions" class="chart-container"></div>
         </div>

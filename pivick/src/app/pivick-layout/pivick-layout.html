@@ -1,9 +1,21 @@
 <div class="rectangle">
-    <div class="pivick-dim-container" mwlResizable [style.width]="dimContainerWidth" [enableGhostResize]="true" (resizeEnd)="onResizeEnd('dim', $event)">
+    <div
+        class="pivick-dim-container"
+        mwlResizable
+        [style.width]="dimContainerWidth"
+        [enableGhostResize]="true"
+        (resizeEnd)="onResizeEnd('dim', $event)"
+    >
         <app-dimension-list style=""></app-dimension-list>
         <div class="resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
     </div>
-    <div class="pivick-sel-container" mwlResizable [style.width]="selContainerWidth" [enableGhostResize]="true" (resizeEnd)="onResizeEnd('sel', $event)">
+    <div
+        class="pivick-sel-container"
+        mwlResizable
+        [style.width]="selContainerWidth"
+        [enableGhostResize]="true"
+        (resizeEnd)="onResizeEnd('sel', $event)"
+    >
         <app-selection-list></app-selection-list>
         <div class="resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
     </div>

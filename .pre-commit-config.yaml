@@ -4,10 +4,3 @@ repos:
       hooks:
           - id: prettier
             types_or: [css, javascript, ts, scss, json, html, yaml]
-
-    - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.12.2
-      hooks:
-          - id: ruff-check
-            args: [--fix]
-          - id: ruff-format

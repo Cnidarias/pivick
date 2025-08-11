@@ -52,14 +52,16 @@ export class PivickAnalysis {
 
     loadPivickSchema() {
         const params = new HttpParams().set('locale', this.selectedLocale);
-        this.http.get<Pivick>(`${this.baseApiUrl}/${this.apiVersion}/schema/${this.selectedPivickModel}`, { params }).subscribe({
-            next: (data: Pivick) => {
-                this.pivickSchemaSubject.next(data);
-            },
-            error: (err) => {
-                // @TODO User facing error messages need to be shown here
-                console.error(err);
-            },
-        });
+        this.http
+            .get<Pivick>(`${this.baseApiUrl}/${this.apiVersion}/schema/${this.selectedPivickModel}`, { params })
+            .subscribe({
+                next: (data: Pivick) => {
+                    this.pivickSchemaSubject.next(data);
+                },
+                error: (err) => {
+                    // @TODO User facing error messages need to be shown here
+                    console.error(err);
+                },
+            });
     }
 }

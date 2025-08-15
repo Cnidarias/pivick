@@ -44,7 +44,6 @@ export class DimensionList implements AfterViewInit {
         if (!this.schema) {
             return;
         }
-        console.log('Locale for tree:' + this.config.locale);
         this.dimensionTree = this.schema.folders
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((folder) => {
@@ -89,7 +88,6 @@ export class DimensionList implements AfterViewInit {
     }
 
     getLabel(member: TCubeDimension | TCubeMeasure): string {
-        console.log(member.meta, member.meta.i18n);
         if (member.meta?.i18n && member.meta.i18n[this.config.locale]) {
             return member.meta.i18n[this.config.locale];
         }

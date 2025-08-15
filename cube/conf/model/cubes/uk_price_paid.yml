@@ -10,61 +10,109 @@ cubes:
             sql: addr1
             type: string
             title: Address Line 1
+            meta:
+                i18n:
+                    de: Adresszeile 1
+                    en: Address Line 1
 
           - name: addr2
             sql: addr2
             type: string
             title: Address Line 2
+            meta:
+                i18n:
+                    de: Adresszeile 2
+                    en: Address Line 2
 
           - name: county
             sql: county
             type: string
             title: County
+            meta:
+                i18n:
+                    de: Grafschaft
+                    en: County
 
           - name: district
             sql: district
             type: string
             title: District
+            meta:
+                i18n:
+                    de: Bezirk
+                    en: District
 
           - name: duration
             sql: duration
             type: string
             title: Duration
+            meta:
+                i18n:
+                    de: Dauer
+                    en: Duration
 
           - name: locality
             sql: locality
             type: string
             title: Locality
+            meta:
+                i18n:
+                    de: Lokalität
+                    en: Locality
 
           - name: postcode1
             sql: postcode1
             type: string
             title: Postcode 1
+            meta:
+                i18n:
+                    de: Postleitzahl 1
+                    en: Postcode 1
 
           - name: postcode2
             sql: postcode2
             type: string
             title: Postcode 2
+            meta:
+                i18n:
+                    de: Postleitzahl 2
+                    en: Postcode 2
 
           - name: street
             sql: street
             type: string
             title: Street
+            meta:
+                i18n:
+                    de: Straße
+                    en: Street
 
           - name: town
             sql: town
             type: string
             title: Town
+            meta:
+                i18n:
+                    de: Stadt
+                    en: Town
 
           - name: type
             sql: type
             type: string
             title: Type
+            meta:
+                i18n:
+                    de: Typ
+                    en: Type
 
           - name: date
             sql: date
             type: time
             title: Date
+            meta:
+                i18n:
+                    de: Datum
+                    en: Date
 
       measures:
           - name: count
@@ -79,11 +127,19 @@ cubes:
             sql: price
             type: sum
             title: Price (sum)
+            meta:
+                i18n:
+                    de: Preis (sum)
+                    en: Price (sum)
 
           - name: price_avg
             sql: price
             type: avg
             title: Price (avg)
+            meta:
+                i18n:
+                    de: Preis (avg)
+                    en: Price (avg)
 
       pre_aggregations:
           # Pre-aggregation definitions go here.

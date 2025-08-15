@@ -21,7 +21,7 @@ export class DimensionList implements AfterViewInit {
 
     private schema?: Cube;
 
-    dimensionTree?: TreeNode<TCubeFolder | TCubeDimension | TCubeMeasure>[];
+    dimensionTree?: TreeNode<TCubeFolder | TCubeDimension | TCubeMeasure>[] = [];
 
     ngAfterViewInit(): void {
         this.pivickAnalysis.cubeSchema$.subscribe((schema) => {

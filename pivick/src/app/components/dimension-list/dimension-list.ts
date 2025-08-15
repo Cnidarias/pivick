@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PivickAnalysis } from '../../services/pivick-analysis';
 import { Tree, TreeNodeDoubleClickEvent } from 'primeng/tree';
 import { TreeNode } from 'primeng/api';
-import { BaseCubeMember, TCubeDimension, TCubeMeasure, TCubeFolder, Cube } from '@cubejs-client/core';
+import { Cube, TCubeDimension, TCubeFolder, TCubeMeasure } from '@cubejs-client/core';
 
 @Component({
     selector: 'app-dimension-list',
@@ -40,13 +40,17 @@ export class DimensionList implements AfterViewInit {
                             .filter((member) => member !== undefined)
                             .sort((a, b) => a.shortTitle.localeCompare(b.shortTitle))
                             .map((member: TCubeDimension) => {
+                                if (member.type === 'time') {
+                                    return this.makeTimeDimensionEntries(member);
+                                }
                                 return {
                                     label: member.shortTitle,
                                     data: member,
                                     key: member.name,
                                     icon: 'pi pi-database',
                                 };
-                            }),
+                            })
+                            .flat(),
                     };
                 });
             this.dimensionTree?.push({
@@ -74,6 +78,24 @@ export class DimensionList implements AfterViewInit {
         return this.schema.dimensions.find((dimension) => {
             return dimension.name === memberName;
         });
+    }
+
+    makeTimeDimensionEntries(dimension: TCubeDimension): TreeNode<TCubeDimension>[] {
+        return ['Full Date', 'Year', 'Quarter', 'Month', 'Week', 'Day', 'Hour', 'Minute', 'Second'].map(
+            (timePart: string) => {
+                return {
+                    label: `${dimension.shortTitle} (${timePart})`,
+                    data: {
+                        ...dimension,
+                        timeDimension: {
+                            dateGranularity: timePart.toLowerCase(),
+                        },
+                    },
+                    key: `${dimension.name}_${timePart}`,
+                    icon: 'pi pi-calendar',
+                };
+            }
+        );
     }
 
     onNodeDoubleClickEvent($e: TreeNodeDoubleClickEvent) {

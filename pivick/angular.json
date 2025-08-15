@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "pivick_ui": {
+        "pivick": {
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
@@ -79,10 +79,10 @@
                     "builder": "@angular/build:dev-server",
                     "configurations": {
                         "production": {
-                            "buildTarget": "pivick_ui:build:production"
+                            "buildTarget": "pivick:build:production"
                         },
                         "development": {
-                            "buildTarget": "pivick_ui:build:development"
+                            "buildTarget": "pivick:build:development"
                         }
                     },
                     "defaultConfiguration": "development"

@@ -53,7 +53,7 @@ export class DimensionList implements AfterViewInit {
                     key: folder.name,
                     expanded: true,
                     children: folder.members
-                        .map((memberName: string) => this.getDimensionByFolderMemberName(memberName))
+                        .map((memberName: string) => this.pivickAnalysis.getDimensionByName(memberName))
                         .filter((member) => member !== undefined)
                         .sort((a, b) => a.shortTitle.localeCompare(b.shortTitle))
                         .map((member: TCubeDimension) => {
@@ -61,7 +61,7 @@ export class DimensionList implements AfterViewInit {
                                 return this.makeTimeDimensionEntries(member);
                             }
                             return {
-                                label: this.getLabel(member),
+                                label: this.pivickAnalysis.getLabel(member),
                                 data: member,
                                 key: member.name,
                                 icon: 'pi pi-database',
@@ -78,28 +78,12 @@ export class DimensionList implements AfterViewInit {
                 .sort((a, b) => a.shortTitle.localeCompare(b.shortTitle))
                 .map((measure: TCubeMeasure) => {
                     return {
-                        label: this.getLabel(measure),
+                        label: this.pivickAnalysis.getLabel(measure),
                         data: measure,
                         key: measure.name,
                         icon: 'pi pi-wave-pulse',
                     };
                 }),
-        });
-    }
-
-    getLabel(member: TCubeDimension | TCubeMeasure): string {
-        if (member.meta?.i18n && member.meta.i18n[this.config.locale]) {
-            return member.meta.i18n[this.config.locale];
-        }
-        return member.shortTitle;
-    }
-
-    getDimensionByFolderMemberName(memberName: string): TCubeDimension | undefined {
-        if (!this.schema) {
-            return undefined;
-        }
-        return this.schema.dimensions.find((dimension) => {
-            return dimension.name === memberName;
         });
     }
 
@@ -117,11 +101,11 @@ export class DimensionList implements AfterViewInit {
         ].map((timePart: string) => {
             const timePartLabel = this.translate.instant(timePart);
             return {
-                label: `${this.getLabel(dimension)} (${timePartLabel})`,
+                label: `${this.pivickAnalysis.getLabel(dimension)} (${timePartLabel})`,
                 data: {
                     ...dimension,
                     timeDimension: {
-                        dateGranularity: timePart.toLowerCase(),
+                        dateGranularity: timePart.split('.').pop(),
                     },
                 },
                 key: `${dimension.name}_${timePart}`,
@@ -131,6 +115,16 @@ export class DimensionList implements AfterViewInit {
     }
 
     onNodeDoubleClickEvent($e: TreeNodeDoubleClickEvent) {
-        console.log($e);
+        if ($e.node.data) {
+            // We assume it's a measure which means it has an aggType
+            const dimensionOrMeasure = $e.node.data as TCubeMeasure;
+            if (dimensionOrMeasure.aggType) {
+                this.pivickAnalysis.addMeasure(dimensionOrMeasure.name);
+            }
+            // Otherwise, we know it's a dimension
+            else {
+                this.pivickAnalysis.addRow(dimensionOrMeasure.name);
+            }
+        }
     }
 }

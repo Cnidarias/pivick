@@ -12,6 +12,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { CubeClientModule } from '@cubejs-client/ngx';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideTranslateService } from '@ngx-translate/core';
 
 const cubeOptions = {
     token: '123123123',
@@ -23,8 +25,16 @@ export const appConfig: ApplicationConfig = {
         provideBrowserGlobalErrorListeners(),
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideRouter(routes),
-        provideHttpClient(),
         provideAnimationsAsync(),
+        provideHttpClient(),
+        provideTranslateService({
+            loader: provideTranslateHttpLoader({
+                prefix: '/assets/i18n/',
+                suffix: '.json',
+            }),
+            fallbackLang: 'en',
+            lang: 'en',
+        }),
         importProvidersFrom(CubeClientModule.forRoot(cubeOptions)),
         providePrimeNG({
             theme: {

@@ -3,6 +3,6 @@
     [value]="dimensionTree"
     [filter]="true"
     filterMode="strict"
-    filterPlaceholder="Search"
+    [filterPlaceholder]="'dimensions.search' | translate"
     (onNodeDoubleClick)="onNodeDoubleClickEvent($event)"
 />

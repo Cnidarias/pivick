@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Dimension, DimensionGroup, Measure, Pivick, PivickAnalysis } from '../../services/pivick-analysis';
+import { PivickAnalysis } from '../../services/pivick-analysis';
 import { Tree, TreeNodeDoubleClickEvent } from 'primeng/tree';
 import { TreeNode } from 'primeng/api';
+import { BaseCubeMember, TCubeDimension, TCubeMeasure, TCubeFolder, Cube } from '@cubejs-client/core';
 
 @Component({
     selector: 'app-dimension-list',
@@ -13,54 +14,65 @@ import { TreeNode } from 'primeng/api';
 export class DimensionList implements AfterViewInit {
     pivickAnalysis: PivickAnalysis = inject(PivickAnalysis);
 
-    dimensionTree?: TreeNode<Dimension | Measure>[];
+    private schema?: Cube;
+
+    dimensionTree?: TreeNode<TCubeFolder | TCubeDimension | TCubeMeasure>[];
 
     ngAfterViewInit(): void {
-        this.pivickAnalysis.$pivickSchema.subscribe((data: Pivick | null) => {
-            if (data) {
-                const groups = [...new Set(data.dimensions.map((item) => item.group))].map((grp) => {
-                    return { id: grp, name: data.dimensionGroups.find((v) => v.id === grp)?.name ?? '' };
-                });
-
-                this.dimensionTree = groups
-                    .sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1))
-                    .map((group, idx) => {
-                        return {
-                            key: `dim-${idx}}-${group.id}`,
-                            label: group.name,
-                            icon: '',
-                            expanded: true,
-                            children: data.dimensions
-                                .filter((dim) => dim.group == group.id)
-                                .sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1))
-                                .map((dim, inneridx) => {
-                                    return {
-                                        key: `dim-${idx}}-${group.id}-${inneridx}-${dim.name}`,
-                                        label: dim.name,
-                                        data: dim,
-                                        icon: 'pi pi-database',
-                                        draggable: true,
-                                    };
-                                }),
-                        };
-                    });
+        this.pivickAnalysis.cubeSchema$.subscribe((schema) => {
+            if (!schema) {
+                this.dimensionTree = [];
+                return;
             }
 
+            this.schema = schema;
+
+            this.dimensionTree = schema.folders
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((folder) => {
+                    return {
+                        label: folder.name,
+                        data: folder,
+                        key: folder.name,
+                        expanded: true,
+                        children: folder.members
+                            .map((memberName: string) => this.getDimensionByFolderMemberName(memberName))
+                            .filter((member) => member !== undefined)
+                            .sort((a, b) => a.shortTitle.localeCompare(b.shortTitle))
+                            .map((member: TCubeDimension) => {
+                                return {
+                                    label: member.shortTitle,
+                                    data: member,
+                                    key: member.name,
+                                    icon: 'pi pi-database',
+                                };
+                            }),
+                    };
+                });
             this.dimensionTree?.push({
                 key: 'measures',
                 label: 'Measures',
                 expanded: true,
-                children: data?.measures
-                    .sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1))
-                    .map((measure, idx) => {
+                children: schema.measures
+                    .sort((a, b) => a.shortTitle.localeCompare(b.shortTitle))
+                    .map((measure: TCubeMeasure) => {
                         return {
-                            key: `measure-${idx}`,
-                            label: measure.name,
+                            label: measure.shortTitle,
                             data: measure,
+                            key: measure.name,
                             icon: 'pi pi-wave-pulse',
                         };
                     }),
             });
+        });
+    }
+
+    getDimensionByFolderMemberName(memberName: string): TCubeDimension | undefined {
+        if (!this.schema) {
+            return undefined;
+        }
+        return this.schema.dimensions.find((dimension) => {
+            return dimension.name === memberName;
         });
     }
 

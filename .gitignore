@@ -16,3 +16,6 @@
 **/__pycache__/
 
 **/.data/
+
+**/.cubestore
+cube/conf/.env

@@ -1,0 +1,26 @@
+views:
+    - name: uk_price_paid_view
+
+      cubes:
+          - join_path: uk_price_paid
+            includes: '*'
+
+      folders:
+          - name: Address
+            includes:
+                - addr1
+                - addr2
+                - county
+                - district
+                - locality
+                - postcode1
+                - postcode2
+                - street
+                - town
+          - name: Property Type
+            includes:
+                - type
+          - name: Transaction Details
+            includes:
+                - duration
+                - date

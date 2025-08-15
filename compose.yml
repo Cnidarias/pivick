@@ -24,4 +24,4 @@ services:
         environment:
             CUBEJS_DEV_MODE: true
         volumes:
-            - './.data/cube/conf:/cube/conf'
+            - './cube/conf:/cube/conf'

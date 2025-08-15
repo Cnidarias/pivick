@@ -9,5 +9,5 @@ import { PivickLayoutComponent } from './pivick-layout/pivick-layout';
     imports: [PivickLayoutComponent],
 })
 export class AppComponent {
-    title = 'pivick-ui';
+    title = 'Pivick';
 }

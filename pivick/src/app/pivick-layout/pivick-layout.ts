@@ -21,7 +21,7 @@ export class PivickLayoutComponent implements OnInit {
     selContainerWidth = '250px';
 
     ngOnInit(): void {
-        this.pivickAnalysis.loadPivickSchema();
+        this.pivickAnalysis.loadSchema();
     }
 
     onResizeEnd(type: string, e: ResizeEvent) {

@@ -1,0 +1,68 @@
+cubes:
+    - name: uk_price_paid
+      sql_table: uk.uk_price_paid
+      data_source: default
+
+      joins: []
+
+      dimensions:
+          - name: addr1
+            sql: addr1
+            type: string
+            title: Address Line 1
+
+          - name: addr2
+            sql: addr2
+            type: string
+
+          - name: county
+            sql: county
+            type: string
+
+          - name: district
+            sql: district
+            type: string
+
+          - name: duration
+            sql: duration
+            type: string
+
+          - name: locality
+            sql: locality
+            type: string
+
+          - name: postcode1
+            sql: postcode1
+            type: string
+
+          - name: postcode2
+            sql: postcode2
+            type: string
+
+          - name: street
+            sql: street
+            type: string
+
+          - name: town
+            sql: town
+            type: string
+
+          - name: type
+            sql: type
+            type: string
+
+          - name: date
+            sql: date
+            type: time
+
+      measures:
+          - name: count
+            type: count
+
+          - name: price
+            sql: price
+            type: sum
+
+      pre_aggregations:
+          # Pre-aggregation definitions go here.
+          # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started

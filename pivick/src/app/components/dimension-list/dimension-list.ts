@@ -7,10 +7,12 @@ import { Cube, TCubeDimension, TCubeFolder, TCubeMeasure } from '@cubejs-client/
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Config } from '../../services/config';
 import { config } from 'rxjs';
+import { DragDropModule } from 'primeng/dragdrop';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-dimension-list',
-    imports: [FormsModule, Tree, TranslatePipe],
+    imports: [FormsModule, Tree, TranslatePipe, DragDropModule, CommonModule],
     templateUrl: './dimension-list.html',
     styleUrl: './dimension-list.scss',
 })
@@ -126,5 +128,16 @@ export class DimensionList implements AfterViewInit {
                 this.pivickAnalysis.addRow(dimensionOrMeasure.name);
             }
         }
+    }
+
+    getDragScope(node: TreeNode<TCubeFolder | TCubeDimension | TCubeMeasure>): string {
+        if (node.key === 'measures' || (node.parent && node.parent.key === 'measures')) {
+            return 'measure';
+        }
+        return 'dimension';
+    }
+
+    onDragStart(item: TCubeDimension | TCubeMeasure) {
+        this.pivickAnalysis.draggedItem = item;
     }
 }

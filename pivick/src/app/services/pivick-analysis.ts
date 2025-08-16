@@ -13,6 +13,8 @@ export class PivickAnalysis {
     private cube: CubeClient = inject(CubeClient);
     private config: Config = inject(Config);
 
+    public draggedItem: TCubeDimension | TCubeMeasure | undefined = undefined;
+
     private selectedCubeName: string = 'uk_price_paid_view';
 
     private _cubeSchemaSubject = new BehaviorSubject<Cube | null>(null);

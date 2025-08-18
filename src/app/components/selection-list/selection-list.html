@@ -1,11 +1,35 @@
-<p-listbox [options]="selectedRows" [dragdrop]="true">
+<!-- Placeholder for the settings menu in this view -->
+<p-menubar [model]="[]">
+  <ng-template #end> </ng-template>
+</p-menubar>
+<!-- End Placeholder for the settings menu in this view -->
+
+<p-list-box
+  class="list-box"
+  (dragover)="onDragOver($event, 'dimension')"
+  (drop)="onTargetDrop($event, 'dimension', 'rows')"
+  [emptyMessage]="'selectionlist.emptyDimensionList' | translate"
+  [options]="selectedRows"
+>
   <ng-template #item let-row> {{getLabel(row)}} </ng-template>
-</p-listbox>
+</p-list-box>
 
-<p-listbox [options]="selectedColumns" [dragdrop]="true">
+<p-list-box
+  class="list-box"
+  (dragover)="onDragOver($event, 'dimension')"
+  (drop)="onTargetDrop($event, 'dimension', 'columns')"
+  [emptyMessage]="'selectionlist.emptyDimensionList' | translate"
+  [options]="selectedColumns"
+>
   <ng-template #item let-col> {{getLabel(col)}} </ng-template>
-</p-listbox>
+</p-list-box>
 
-<p-listbox [options]="selectedMeasures" [dragdrop]="true">
+<p-list-box
+  class="list-box"
+  (dragover)="onDragOver($event, 'measure')"
+  (drop)="onTargetDrop($event, 'measure', 'measure')"
+  [emptyMessage]="'selectionlist.emptyMeasureList' | translate"
+  [options]="selectedMeasures"
+>
   <ng-template #item let-measure> {{getLabel(measure)}} </ng-template>
-</p-listbox>
+</p-list-box>

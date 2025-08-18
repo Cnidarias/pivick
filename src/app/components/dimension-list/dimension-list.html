@@ -5,4 +5,10 @@
   filterMode="strict"
   [filterPlaceholder]="'dimensions.search' | translate"
   (onNodeDoubleClick)="onNodeDoubleClickEvent($event)"
-/>
+  [draggableNodes]="true"
+  (dragstart)="onDragStart($event)"
+>
+  <ng-template let-node pTemplate="default" draggable="true">
+    <span>{{ node.label }}</span>
+  </ng-template>
+</p-tree>

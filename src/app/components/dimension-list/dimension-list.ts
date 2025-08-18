@@ -2,7 +2,7 @@ import { AfterViewInit, Component, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { PivickAnalysis } from "../../services/pivick-analysis";
 import { Tree, TreeNodeDoubleClickEvent } from "primeng/tree";
-import { TreeNode } from "primeng/api";
+import { PrimeTemplate, TreeNode, TreeDragDropService } from "primeng/api";
 import {
   Cube,
   TCubeDimension,
@@ -11,11 +11,11 @@ import {
 } from "@cubejs-client/core";
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { Config } from "../../services/config";
-import { config } from "rxjs";
 
 @Component({
   selector: "app-dimension-list",
-  imports: [FormsModule, Tree, TranslatePipe],
+  imports: [FormsModule, Tree, TranslatePipe, PrimeTemplate],
+  providers: [TreeDragDropService],
   templateUrl: "./dimension-list.html",
   styleUrl: "./dimension-list.scss",
 })
@@ -23,6 +23,10 @@ export class DimensionList implements AfterViewInit {
   private translate: TranslateService = inject(TranslateService);
   private config: Config = inject(Config);
   private pivickAnalysis: PivickAnalysis = inject(PivickAnalysis);
+  private treeDragDropService: TreeDragDropService =
+    inject(TreeDragDropService);
+
+  currentlyDraggedNode?: TreeNode<TCubeFolder | TCubeDimension | TCubeMeasure>;
 
   private schema?: Cube;
 
@@ -92,6 +96,14 @@ export class DimensionList implements AfterViewInit {
           };
         }),
     });
+
+    this.treeDragDropService.dragStart$.subscribe((drag) => {
+      this.currentlyDraggedNode = drag.node;
+    });
+
+    this.treeDragDropService.dragStop$.subscribe((drag) => {
+      this.currentlyDraggedNode = undefined;
+    });
   }
 
   makeTimeDimensionEntries(
@@ -134,6 +146,20 @@ export class DimensionList implements AfterViewInit {
       else {
         this.pivickAnalysis.addRow(dimensionOrMeasure.name);
       }
+    }
+  }
+
+  onDragStart($event: DragEvent) {
+    if (this.currentlyDraggedNode?.parent?.key === "measures") {
+      $event.dataTransfer?.setData(
+        "pivick/measure-node",
+        this.currentlyDraggedNode?.key || "N/A",
+      );
+    } else {
+      $event.dataTransfer?.setData(
+        "pivick/dimension-node",
+        this.currentlyDraggedNode?.key || "N/A",
+      );
     }
   }
 }

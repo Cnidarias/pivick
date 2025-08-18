@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  gap: 1em;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.list-box {
+  min-height: 75px;
+  min-width: 90%;
+  max-width: 90%;
+  width: 90%;
+  margin: 0 1em 0 1em;
+}

@@ -1,12 +1,14 @@
 {
-  "dimensions.search": "Search",
-  "date.full": "Full",
-  "date.year": "Year",
-  "date.quarter": "Quarter",
-  "date.month": "Month",
-  "date.week": "Week",
   "date.day": "Day",
+  "date.full": "Full",
   "date.hour": "Hour",
   "date.minute": "Minute",
-  "date.second": "Second"
+  "date.month": "Month",
+  "date.quarter": "Quarter",
+  "date.second": "Second",
+  "date.week": "Week",
+  "date.year": "Year",
+  "dimensions.search": "Search",
+  "selectionlist.emptyDimensionList": "Empty - Please select a dimension",
+  "selectionlist.emptyMeasureList": "Empty - Please select a measure"
 }

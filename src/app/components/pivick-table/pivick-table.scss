@@ -1,0 +1,15 @@
+:host {
+  flex: 1;
+  overflow: hidden;
+  max-height: 100%;
+  max-width: 100%;
+  display: flex;
+}
+
+.pivick-table {
+  flex: 1;
+  max-height: 100%;
+  max-width: 100%;
+  padding: 1em;
+  padding-bottom: 58px;
+}

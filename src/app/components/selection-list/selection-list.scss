@@ -8,6 +8,11 @@
   overflow-y: auto;
 }
 
+.list-box-title {
+  align-self: flex-start;
+  padding-left: 1em;
+}
+
 .list-box {
   min-height: 75px;
   min-width: 90%;

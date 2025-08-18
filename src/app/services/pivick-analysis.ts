@@ -1,15 +1,23 @@
 import { inject, Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { HttpClient, HttpParams } from "@angular/common/http";
 import { CubeClient } from "@cubejs-client/ngx";
-import { Cube, Meta, TCubeDimension, TCubeMeasure } from "@cubejs-client/core";
+import {
+  Cube,
+  Meta,
+  Query,
+  QueryOrder,
+  ResultSet,
+  TCubeDimension,
+  TCubeMeasure,
+  TQueryOrderArray,
+  TQueryOrderObject,
+} from "@cubejs-client/core";
 import { Config } from "./config";
 
 @Injectable({
   providedIn: "root",
 })
 export class PivickAnalysis {
-  private http: HttpClient = inject(HttpClient);
   private cube: CubeClient = inject(CubeClient);
   private config: Config = inject(Config);
 
@@ -26,6 +34,40 @@ export class PivickAnalysis {
 
   private _selectedMeasuresSubject = new BehaviorSubject<string[]>([]);
   public selectedMeasures$ = this._selectedMeasuresSubject.asObservable();
+
+  private _cubeDataSubject = new BehaviorSubject<ResultSet | null>(null);
+  public cubeData$ = this._cubeDataSubject.asObservable();
+
+  private _areLoadingDataSubject = new BehaviorSubject<boolean>(false);
+  public areLoadingData$ = this._areLoadingDataSubject.asObservable();
+
+  updateData() {
+    const selectedMeasures = [...this._selectedMeasuresSubject.getValue()];
+    const selectedDims = [
+      ...this._selectedRowsSubject.getValue(),
+      ...this._selectedColumnsSubject.getValue(),
+    ];
+
+    const everything = [...selectedMeasures, ...selectedDims];
+
+    const orders: TQueryOrderObject = Object.fromEntries(
+      everything.map((k) => [k, "desc"]),
+    );
+
+    const query: Query = {
+      measures: selectedMeasures,
+      dimensions: selectedDims,
+      order: orders,
+      total: true,
+    };
+
+    this._areLoadingDataSubject.next(true);
+
+    this.cube.load(query).subscribe((result) => {
+      this._cubeDataSubject.next(result);
+      this._areLoadingDataSubject.next(false);
+    });
+  }
 
   loadSchema() {
     this.cube.meta().subscribe({
@@ -50,47 +92,73 @@ export class PivickAnalysis {
     const currentRows = this._selectedRowsSubject.getValue();
     if (!currentRows.includes(row)) {
       this._selectedRowsSubject.next([...currentRows, row]);
+      this.updateData();
     }
   }
+
   removeRow(row: string) {
     const currentRows = this._selectedRowsSubject.getValue();
     this._selectedRowsSubject.next(currentRows.filter((r) => r !== row));
+    this.updateData();
   }
 
   clearRows() {
     this._selectedRowsSubject.next([]);
+    this.updateData();
+  }
+
+  getRows() {
+    return [...this._selectedRowsSubject.getValue()];
   }
 
   addColumn(column: string) {
     const currentColumns = this._selectedColumnsSubject.getValue();
     if (!currentColumns.includes(column)) {
       this._selectedColumnsSubject.next([...currentColumns, column]);
+      this.updateData();
     }
   }
+
   removeColumn(column: string) {
     const currentColumns = this._selectedColumnsSubject.getValue();
     this._selectedColumnsSubject.next(
       currentColumns.filter((c) => c !== column),
     );
+    this.updateData();
   }
+
   clearColumns() {
     this._selectedColumnsSubject.next([]);
+    this.updateData();
+  }
+
+  getColumns() {
+    return [...this._selectedColumnsSubject.getValue()];
   }
 
   addMeasure(measure: string) {
     const currentMeasures = this._selectedMeasuresSubject.getValue();
     if (!currentMeasures.includes(measure)) {
       this._selectedMeasuresSubject.next([...currentMeasures, measure]);
+      this.updateData();
     }
   }
+
   removeMeasure(measure: string) {
     const currentMeasures = this._selectedMeasuresSubject.getValue();
     this._selectedMeasuresSubject.next(
       currentMeasures.filter((m) => m !== measure),
     );
+    this.updateData();
   }
+
   clearMeasures() {
     this._selectedMeasuresSubject.next([]);
+    this.updateData();
+  }
+
+  getMeasures() {
+    return [...this._selectedMeasuresSubject.getValue()];
   }
 
   getDimensionByName(name: string): TCubeDimension | undefined {
@@ -118,5 +186,17 @@ export class PivickAnalysis {
       return member.meta.i18n[this.config.locale];
     }
     return member.shortTitle;
+  }
+
+  getLabelByKey(key: string): string {
+    let dimension = this.getDimensionByName(key);
+    if (dimension) {
+      return this.getLabel(dimension);
+    }
+    let measure = this.getMeasureByName(key);
+    if (measure) {
+      return this.getLabel(measure);
+    }
+    return "N/A";
   }
 }

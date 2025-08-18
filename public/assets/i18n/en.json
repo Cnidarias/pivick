@@ -10,5 +10,8 @@
   "date.year": "Year",
   "dimensions.search": "Search",
   "selectionlist.emptyDimensionList": "Empty - Please select a dimension",
-  "selectionlist.emptyMeasureList": "Empty - Please select a measure"
+  "selectionlist.emptyMeasureList": "Empty - Please select a measure",
+  "selectionlist.rows": "Rows",
+  "selectionlist.columns": "Columns",
+  "selectionlist.measures": "Measures"
 }

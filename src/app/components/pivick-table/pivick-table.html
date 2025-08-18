@@ -1,0 +1,28 @@
+<p-table
+  [rowHover]="true"
+  [scrollable]="true"
+  [value]="tableData"
+  class="pivick-table"
+  [rows]="selectedRows"
+  [rowsPerPageOptions]="availableRowCounts"
+  [paginator]="isPaginatorEnabled"
+  [loading]="isLoading"
+  scrollHeight="100%"
+  stripedRows
+  size="small"
+>
+  <ng-template #header>
+    <tr>
+      @for (column of tableColumns; track column) {
+      <th>{{ pivickAnalysis.getLabelByKey(column.key) }}</th>
+      }
+    </tr>
+  </ng-template>
+  <ng-template #body let-data>
+    <tr>
+      @for (column of tableColumns; track column) {
+      <td>{{ data[column.key] }}</td>
+      }
+    </tr>
+  </ng-template>
+</p-table>

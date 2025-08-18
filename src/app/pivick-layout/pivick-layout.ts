@@ -42,7 +42,9 @@ export class PivickLayoutComponent implements OnInit {
   }
 
   toggleDarkMode() {
-    const element = document.querySelector("html")!;
-    element.classList.toggle("my-app-dark");
+    const element = document.querySelector("html");
+    if (element) {
+      element.classList.toggle("my-app-dark");
+    }
   }
 }

@@ -6,17 +6,18 @@ import {
   TranslatePipe,
   TranslateModule,
   TranslateLoader,
+  TranslationObject,
 } from "@ngx-translate/core";
 import { Config } from "../../services/config";
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { Cube, TCubeDimension, TCubeMeasure } from "@cubejs-client/core";
-import { TreeModule } from "primeng/tree";
+import { TreeModule, TreeNodeDoubleClickEvent } from "primeng/tree";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { HttpClient } from "@angular/common/http";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 class FakeLoader implements TranslateLoader {
-  getTranslation(lang: string): Observable<any> {
+  getTranslation(lang: string): Observable<TranslationObject> {
     return of({
       "dimensions.search": "Search dimensions",
     });
@@ -145,7 +146,9 @@ describe("DimensionList", () => {
         data: { name: "count", aggType: "count" } as TCubeMeasure,
       },
     };
-    component.onNodeDoubleClickEvent(mockMeasureNode as any);
+    component.onNodeDoubleClickEvent(
+      mockMeasureNode as TreeNodeDoubleClickEvent,
+    );
     expect(pivickAnalysis.addMeasure).toHaveBeenCalledWith("count");
   });
 
@@ -155,7 +158,9 @@ describe("DimensionList", () => {
         data: { name: "price", type: "number" } as TCubeDimension,
       },
     };
-    component.onNodeDoubleClickEvent(mockDimensionNode as any);
+    component.onNodeDoubleClickEvent(
+      mockDimensionNode as TreeNodeDoubleClickEvent,
+    );
     expect(pivickAnalysis.addRow).toHaveBeenCalledWith("price");
   });
 });

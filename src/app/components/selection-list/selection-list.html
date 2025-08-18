@@ -4,6 +4,7 @@
 </p-menubar>
 <!-- End Placeholder for the settings menu in this view -->
 
+<span class="list-box-title">{{ 'selectionlist.rows' | translate }}</span>
 <p-list-box
   class="list-box"
   (dragover)="onDragOver($event, 'dimension')"
@@ -14,6 +15,7 @@
   <ng-template #item let-row> {{getLabel(row)}} </ng-template>
 </p-list-box>
 
+<span class="list-box-title">{{ 'selectionlist.columns' | translate }}</span>
 <p-list-box
   class="list-box"
   (dragover)="onDragOver($event, 'dimension')"
@@ -24,6 +26,7 @@
   <ng-template #item let-col> {{getLabel(col)}} </ng-template>
 </p-list-box>
 
+<span class="list-box-title">{{ 'selectionlist.measures' | translate }}</span>
 <p-list-box
   class="list-box"
   (dragover)="onDragOver($event, 'measure')"

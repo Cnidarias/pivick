@@ -4,10 +4,20 @@ import { PivickAnalysis } from "../../services/pivick-analysis";
 import { TCubeDimension, TCubeMeasure } from "@cubejs-client/core";
 import { Menubar } from "primeng/menubar";
 import { SelectionListBox } from "./selection-list-box/selection-list-box";
+import { Button } from "primeng/button";
+import { Tooltip } from "primeng/tooltip";
+import { TranslatePipe } from "@ngx-translate/core";
 
 @Component({
   selector: "app-selection-list",
-  imports: [FormsModule, Menubar, SelectionListBox],
+  imports: [
+    FormsModule,
+    Menubar,
+    SelectionListBox,
+    Button,
+    Tooltip,
+    TranslatePipe,
+  ],
   templateUrl: "./selection-list.html",
   styleUrl: "./selection-list.scss",
 })

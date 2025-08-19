@@ -7,7 +7,9 @@
   [options]="items"
   [readonly]="true"
   [dragdrop]="true"
+  pTooltip=""
   (onDrop)="onItemsChange($event)"
+  title=""
 >
   <ng-template #item let-element>
     <span class="selection-label"
@@ -19,6 +21,7 @@
       [text]="true"
       severity="danger"
       (onClick)="onRemoveFromSelection(element)"
+      [pTooltip]="'selectionlist.removeFromSelection' | translate"
     ></p-button>
   </ng-template>
 </p-list-box>

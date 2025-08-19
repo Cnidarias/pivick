@@ -34,5 +34,5 @@ jobs:
 
       - name: "Build Image"
         run: |
-          docker build --tag ghcr.io/cnidarias/pivick:$BRANCH_NAME
+          docker build --tag ghcr.io/cnidarias/pivick:$BRANCH_NAME .
           docker push ghcr.io/cnidarias/pivick:$BRANCH_NAME

@@ -6,6 +6,7 @@ import { PivickContent } from "../components/pivick-content/pivick-content";
 import { PivickAnalysis } from "../services/pivick-analysis";
 import { Button } from "primeng/button";
 import { Menubar } from "primeng/menubar";
+import { Tag } from "primeng/tag";
 
 @Component({
   selector: "app-pivick-layout",
@@ -19,16 +20,22 @@ import { Menubar } from "primeng/menubar";
     PivickContent,
     Button,
     Menubar,
+    Tag,
   ],
 })
 export class PivickLayoutComponent implements OnInit {
-  pivickAnalysis: PivickAnalysis = inject(PivickAnalysis);
+  protected pivickAnalysis: PivickAnalysis = inject(PivickAnalysis);
+
+  cubeName: string = "";
 
   dimContainerWidth = "250px";
   selContainerWidth = "250px";
 
   ngOnInit(): void {
     this.pivickAnalysis.loadSchema();
+    this.pivickAnalysis.cubeName$.subscribe((name) => {
+      this.cubeName = name;
+    });
   }
 
   onResizeEnd(type: string, e: ResizeEvent) {

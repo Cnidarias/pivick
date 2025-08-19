@@ -6,10 +6,11 @@ import { PivickAnalysis } from "../../../services/pivick-analysis";
 import { TCubeDimension, TCubeMeasure } from "@cubejs-client/core";
 import { Observable } from "rxjs";
 import { CdkDragDrop } from "@angular/cdk/drag-drop";
+import { Tooltip } from "primeng/tooltip";
 
 @Component({
   selector: "app-selection-list-box",
-  imports: [Button, Listbox, TranslatePipe],
+  imports: [Button, Listbox, TranslatePipe, Tooltip],
   templateUrl: "./selection-list-box.html",
   styleUrl: "./selection-list-box.scss",
 })

@@ -1,6 +1,14 @@
 <!-- Placeholder for the settings menu in this view -->
-<p-menubar [model]="[]">
-  <ng-template #end> </ng-template>
+<p-menubar style="width: 100%" [model]="[]">
+  <ng-template #end>
+    <p-button
+      [pTooltip]="'menu.clearReport' | translate"
+      icon="pi pi-trash"
+      [text]="true"
+      severity="danger"
+      (onClick)="pivickAnalysis.resetReport()"
+    ></p-button>
+  </ng-template>
 </p-menubar>
 <!-- End Placeholder for the settings menu in this view -->
 

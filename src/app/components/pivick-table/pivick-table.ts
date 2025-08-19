@@ -2,10 +2,11 @@ import { Component, inject, OnInit } from "@angular/core";
 import { PivickAnalysis } from "../../services/pivick-analysis";
 import { ResultSet, TableColumn } from "@cubejs-client/core";
 import { TableModule } from "primeng/table";
+import { Tooltip } from "primeng/tooltip";
 
 @Component({
   selector: "app-pivick-table",
-  imports: [TableModule],
+  imports: [TableModule, Tooltip],
   templateUrl: "./pivick-table.html",
   styleUrl: "./pivick-table.scss",
 })
@@ -15,6 +16,8 @@ export class PivickTable implements OnInit {
   availableRowCounts = [100, 500, 1000];
   selectedRows = this.availableRowCounts[1];
   isPaginatorEnabled = false;
+
+  isRowSpanningEnabled = false;
 
   isLoading = false;
 
@@ -45,5 +48,26 @@ export class PivickTable implements OnInit {
         this.isPaginatorEnabled = false;
       }
     });
+  }
+
+  calculateRowSpan(key: string, idx: number): number {
+    if (!this.isRowSpanningEnabled) {
+      return 1; // Row spanning is disabled, return 1
+    }
+    if (this.pivickAnalysis.isMeasureByKey(key)) {
+      return 1; // Measures do not span rows
+    }
+    if (idx > 0 && this.tableData[idx][key] === this.tableData[idx - 1][key]) {
+      return -1; // This row is a duplicate, no need to span
+    }
+    let rowSpan = 1;
+    for (let i = idx + 1; i < this.tableData.length; i++) {
+      if (this.tableData[i][key] === this.tableData[idx][key]) {
+        rowSpan++;
+      } else {
+        break;
+      }
+    }
+    return rowSpan;
   }
 }

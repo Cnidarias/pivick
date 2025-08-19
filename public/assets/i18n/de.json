@@ -11,7 +11,7 @@
   "dimensions.search": "Suchen",
   "menu.clearReport": "Bericht zurücksetzen",
   "selectionlist.columns": "Spalten",
-  "selectionlist.emptyDimensionList": "Leer - Bitte eine Dimmension auswählen",
+  "selectionlist.emptyDimensionList": "Leer - Bitte eine Dimension auswählen",
   "selectionlist.emptyMeasureList": "Leer - Bitte einen Messwert auswählen",
   "selectionlist.measures": "Messwerte",
   "selectionlist.removeFromSelection": "Auswahl entfernen",

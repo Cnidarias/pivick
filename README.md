@@ -1,20 +1,19 @@
 # Pivick UI
 
-Pivick UI is a frontend application for managing and visualizing data in the Pivick ecosystem. It provides an intuitive interface for interacting with Pivick services.
+Pivick UI is a frontend application for visualizing data using the [cube.dev](https://cube.dev/) ecosystem. 
+It provides an intuitive interface for interacting with Pivick services.
 
-## Features
-
-- User authentication and authorization
-- Data visualization dashboards
-- CRUD operations for Pivick resources
-- Responsive design
+## Focus Points
+- **Data Visualization**: Leverages cube.dev for powerful data analytics and visualization.
+- **User Experience**: Designed with a focus on usability and performance.
+- **Data Exploration**: Allows non-technical users to explore and analyze data efficiently, not reliant on having a buisiness analysis create a complex dashboard
 
 ## Technologies Used
 
 - Angular
-- TypeScript
-- RxJS
-- [Add other frameworks/libraries as appropriate]
+- [cube.dev](https://cube.dev/)
+- Docker (compose)
+- Clickhouse
 
 ## Getting Started
 
@@ -49,6 +48,13 @@ Start the development server:
 ng serve
 ```
 
+You should also have the backend services running. If you have Docker installed, you can use the provided `docker-compose.yml` to start the backend services:
+
+```bash
+docker-compose up -d
+```
+This will start the necessary services, including Clickhouse and cube.dev.
+
 The app will be available at [http://localhost:4200](http://localhost:4200).
 
 ### Building for Production
@@ -57,24 +63,4 @@ The app will be available at [http://localhost:4200](http://localhost:4200).
 ng build --prod
 ```
 
-## Project Structure
-
-```
-pivick_ui/
-├── src/
-│   ├── app/
-│   ├── assets/
-│   ├── environments/
-│   └── ...
-├── angular.json
-├── package.json
-└── README.md
-```
-
-## Contributing
-
 Contributions are welcome! Please open issues or submit pull requests for improvements.
-
-## Contact
-
-For questions or support, contact [your.email@example.com].

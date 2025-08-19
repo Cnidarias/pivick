@@ -116,6 +116,11 @@ export class PivickAnalysis {
     return [...this._selectedRowsSubject.getValue()];
   }
 
+  setRows(rows: string[]) {
+    this._selectedRowsSubject.next(rows);
+    this.updateData();
+  }
+
   addColumn(column: string) {
     const currentColumns = this._selectedColumnsSubject.getValue();
     if (!currentColumns.includes(column)) {
@@ -141,6 +146,11 @@ export class PivickAnalysis {
     return [...this._selectedColumnsSubject.getValue()];
   }
 
+  setColumns(columns: string[]) {
+    this._selectedColumnsSubject.next(columns);
+    this.updateData();
+  }
+
   addMeasure(measure: string) {
     const currentMeasures = this._selectedMeasuresSubject.getValue();
     if (!currentMeasures.includes(measure)) {
@@ -164,6 +174,11 @@ export class PivickAnalysis {
 
   getMeasures() {
     return [...this._selectedMeasuresSubject.getValue()];
+  }
+
+  setMeasures(measures: string[]) {
+    this._selectedMeasuresSubject.next(measures);
+    this.updateData();
   }
 
   getDimensionByKey(name: string): TCubeDimension | undefined {

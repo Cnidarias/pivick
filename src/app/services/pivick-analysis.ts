@@ -107,9 +107,11 @@ export class PivickAnalysis {
     this.updateData();
   }
 
-  clearRows() {
+  clearRows(update: boolean) {
     this._selectedRowsSubject.next([]);
-    this.updateData();
+    if (update) {
+      this.updateData();
+    }
   }
 
   getRows() {
@@ -137,9 +139,11 @@ export class PivickAnalysis {
     this.updateData();
   }
 
-  clearColumns() {
+  clearColumns(update: boolean) {
     this._selectedColumnsSubject.next([]);
-    this.updateData();
+    if (update) {
+      this.updateData();
+    }
   }
 
   getColumns() {
@@ -167,9 +171,11 @@ export class PivickAnalysis {
     this.updateData();
   }
 
-  clearMeasures() {
+  clearMeasures(update: boolean) {
     this._selectedMeasuresSubject.next([]);
-    this.updateData();
+    if (update) {
+      this.updateData();
+    }
   }
 
   getMeasures() {
@@ -179,6 +185,14 @@ export class PivickAnalysis {
   setMeasures(measures: string[]) {
     this._selectedMeasuresSubject.next(measures);
     this.updateData();
+  }
+
+  resetReport() {
+    this.clearRows(false);
+    this.clearColumns(false);
+    this.clearMeasures(false);
+    this._cubeDataSubject.next(null);
+    this._areLoadingDataSubject.next(false);
   }
 
   getDimensionByKey(name: string): TCubeDimension | undefined {

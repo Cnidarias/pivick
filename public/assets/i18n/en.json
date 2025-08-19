@@ -9,9 +9,11 @@
   "date.week": "Week",
   "date.year": "Year",
   "dimensions.search": "Search",
+  "menu.clearReport": "Reset Report",
+  "selectionlist.columns": "Columns",
   "selectionlist.emptyDimensionList": "Empty - Please select a dimension",
   "selectionlist.emptyMeasureList": "Empty - Please select a measure",
-  "selectionlist.rows": "Rows",
-  "selectionlist.columns": "Columns",
-  "selectionlist.measures": "Measures"
+  "selectionlist.measures": "Measures",
+  "selectionlist.removeFromSelection": "Remove from report",
+  "selectionlist.rows": "Rows"
 }

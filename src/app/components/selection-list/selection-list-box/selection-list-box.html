@@ -6,6 +6,8 @@
   [emptyMessage]="emptyMessage | translate"
   [options]="items"
   [readonly]="true"
+  [dragdrop]="true"
+  (onDrop)="onItemsChange($event)"
 >
   <ng-template #item let-element>
     <span class="selection-label"

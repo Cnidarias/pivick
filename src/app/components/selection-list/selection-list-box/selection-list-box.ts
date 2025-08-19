@@ -1,10 +1,11 @@
 import { Component, inject, Input, input, OnInit } from "@angular/core";
 import { Button } from "primeng/button";
-import { Listbox } from "primeng/listbox";
+import { Listbox, ListboxChangeEvent } from "primeng/listbox";
 import { TranslatePipe } from "@ngx-translate/core";
 import { PivickAnalysis } from "../../../services/pivick-analysis";
 import { TCubeDimension, TCubeMeasure } from "@cubejs-client/core";
 import { Observable } from "rxjs";
+import { CdkDragDrop } from "@angular/cdk/drag-drop";
 
 @Component({
   selector: "app-selection-list-box",
@@ -88,6 +89,24 @@ export class SelectionListBox implements OnInit {
         break;
       case "measures":
         this.pivickAnalysis.removeMeasure(item.name);
+        break;
+    }
+  }
+
+  onItemsChange($event: CdkDragDrop<string[], string[]>) {
+    const newItems = [...this.items];
+    const movedItem = newItems.splice($event.previousIndex, 1)[0];
+    newItems.splice($event.currentIndex, 0, movedItem);
+
+    switch (this.target) {
+      case "rows":
+        this.pivickAnalysis.setRows(newItems.map((item) => item.name));
+        break;
+      case "columns":
+        this.pivickAnalysis.setColumns(newItems.map((item) => item.name));
+        break;
+      case "measures":
+        this.pivickAnalysis.setMeasures(newItems.map((item) => item.name));
         break;
     }
   }

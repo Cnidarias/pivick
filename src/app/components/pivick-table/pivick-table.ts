@@ -39,6 +39,10 @@ export class PivickTable implements OnInit {
 
         this.isPaginatorEnabled =
           this.tableData.length > this.availableRowCounts[0];
+      } else {
+        this.tableData = [];
+        this.tableColumns = [];
+        this.isPaginatorEnabled = false;
       }
     });
   }

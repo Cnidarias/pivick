@@ -1,0 +1,22 @@
+<span class="list-box-title">{{ title | translate }}</span>
+<p-list-box
+  class="list-box"
+  (dragover)="onDragOver($event)"
+  (drop)="onTargetDrop($event)"
+  [emptyMessage]="emptyMessage | translate"
+  [options]="items"
+  [readonly]="true"
+>
+  <ng-template #item let-element>
+    <span class="selection-label"
+      >{{this.pivickAnalysis.getLabel(element)}}</span
+    >
+    <p-button
+      size="small"
+      icon="pi pi-trash"
+      [text]="true"
+      severity="danger"
+      (onClick)="onRemoveFromSelection(element)"
+    ></p-button>
+  </ng-template>
+</p-list-box>

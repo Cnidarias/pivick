@@ -13,11 +13,18 @@
 }
 
 .dimension-column-header {
-  background-color: var(--p-button-outlined-primary-active-background);
-  color: var(--p-button-outlined-primary-color);
+  background-color: var(--p-tag-primary-background);
+  color: var(--p-tag-primary-color);
 }
 
 .measure-column-header {
-  background-color: var(--p-button-outlined-info-active-background);
-  color: var(--p-button-outlined-info-color);
+  background-color: var(--p-tag-info-background);
+  color: var(--p-tag-info-color);
+}
+
+::ng-deep
+  .p-datatable-striped.p-datatable-hoverable
+  .p-datatable-tbody
+  > tr:not(.p-datatable-row-selected):hover {
+  background-color: var(--p-tag-warn-background);
 }

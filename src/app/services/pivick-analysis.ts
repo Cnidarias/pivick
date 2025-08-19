@@ -51,7 +51,7 @@ export class PivickAnalysis {
       ...this._selectedColumnsSubject.getValue(),
     ];
 
-    const everything = [...selectedMeasures, ...selectedDims];
+    const everything = [...selectedDims, ...selectedMeasures];
 
     if (everything.length === 0) {
       this._cubeDataSubject.next(null);

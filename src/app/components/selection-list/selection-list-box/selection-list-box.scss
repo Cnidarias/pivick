@@ -28,3 +28,7 @@
 .selection-trash-icon {
   color: var(--p-button-text-danger-color);
 }
+
+::ng-deep .p-listbox-empty-message {
+  font-size: small;
+}

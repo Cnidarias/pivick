@@ -13,3 +13,13 @@
   padding: 1em;
   padding-bottom: 58px;
 }
+
+.dimension-column-header {
+  background-color: var(--p-button-outlined-primary-active-background);
+  color: var(--p-button-outlined-primary-color);
+}
+
+.measure-column-header {
+  background-color: var(--p-button-outlined-info-active-background);
+  color: var(--p-button-outlined-info-color);
+}

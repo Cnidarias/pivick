@@ -63,7 +63,7 @@ export class DimensionList implements AfterViewInit {
           expanded: true,
           children: folder.members
             .map((memberName: string) =>
-              this.pivickAnalysis.getDimensionByName(memberName),
+              this.pivickAnalysis.getDimensionByKey(memberName),
             )
             .filter((member) => member !== undefined)
             .sort((a, b) => a.shortTitle.localeCompare(b.shortTitle))

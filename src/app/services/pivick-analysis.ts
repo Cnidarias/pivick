@@ -50,6 +50,11 @@ export class PivickAnalysis {
 
     const everything = [...selectedMeasures, ...selectedDims];
 
+    if (everything.length === 0) {
+      this._cubeDataSubject.next(null);
+      return;
+    }
+
     const orders: TQueryOrderObject = Object.fromEntries(
       everything.map((k) => [k, "desc"]),
     );
@@ -161,7 +166,7 @@ export class PivickAnalysis {
     return [...this._selectedMeasuresSubject.getValue()];
   }
 
-  getDimensionByName(name: string): TCubeDimension | undefined {
+  getDimensionByKey(name: string): TCubeDimension | undefined {
     const schema = this._cubeSchemaSubject.getValue();
     if (!schema) {
       return undefined;
@@ -171,7 +176,7 @@ export class PivickAnalysis {
     });
   }
 
-  getMeasureByName(name: string): TCubeMeasure | undefined {
+  getMeasureByKey(name: string): TCubeMeasure | undefined {
     const schema = this._cubeSchemaSubject.getValue();
     if (!schema) {
       return undefined;
@@ -179,6 +184,20 @@ export class PivickAnalysis {
     return schema.measures.find((measure) => {
       return measure.name === name;
     });
+  }
+
+  getDimensionOrMeasureByKey(
+    key: string,
+  ): TCubeDimension | TCubeMeasure | undefined {
+    let dimension = this.getDimensionByKey(key);
+    if (dimension) {
+      return dimension;
+    }
+    let measure = this.getMeasureByKey(key);
+    if (measure) {
+      return measure;
+    }
+    return undefined;
   }
 
   getLabel(member: TCubeDimension | TCubeMeasure): string {
@@ -189,11 +208,11 @@ export class PivickAnalysis {
   }
 
   getLabelByKey(key: string): string {
-    let dimension = this.getDimensionByName(key);
+    let dimension = this.getDimensionByKey(key);
     if (dimension) {
       return this.getLabel(dimension);
     }
-    let measure = this.getMeasureByName(key);
+    let measure = this.getMeasureByKey(key);
     if (measure) {
       return this.getLabel(measure);
     }

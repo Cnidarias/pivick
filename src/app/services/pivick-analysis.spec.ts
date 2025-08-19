@@ -216,7 +216,7 @@ describe("PivickAnalysis", () => {
     it("should return the correct dimension", (done) => {
       service.loadSchema();
       service.cubeSchema$.subscribe(() => {
-        const dimension = service.getDimensionByName("price");
+        const dimension = service.getDimensionByKey("price");
         expect(dimension).toBeDefined();
         expect(dimension?.name).toBe("price");
         done();
@@ -224,7 +224,7 @@ describe("PivickAnalysis", () => {
     });
 
     it("should return undefined if schema is not loaded", () => {
-      const dimension = service.getDimensionByName("price");
+      const dimension = service.getDimensionByKey("price");
       expect(dimension).toBeUndefined();
     });
   });
@@ -233,7 +233,7 @@ describe("PivickAnalysis", () => {
     it("should return the correct measure", (done) => {
       service.loadSchema();
       service.cubeSchema$.subscribe(() => {
-        const measure = service.getMeasureByName("count");
+        const measure = service.getMeasureByKey("count");
         expect(measure).toBeDefined();
         expect(measure?.name).toBe("count");
         done();
@@ -241,7 +241,7 @@ describe("PivickAnalysis", () => {
     });
 
     it("should return undefined if schema is not loaded", () => {
-      const measure = service.getMeasureByName("count");
+      const measure = service.getMeasureByKey("count");
       expect(measure).toBeUndefined();
     });
   });

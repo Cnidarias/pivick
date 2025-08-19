@@ -26,6 +26,9 @@ export class PivickAnalysis {
   private _cubeSchemaSubject = new BehaviorSubject<Cube | null>(null);
   public cubeSchema$ = this._cubeSchemaSubject.asObservable();
 
+  private _cubeNameSubject = new BehaviorSubject<string>(this.selectedCubeName);
+  public cubeName$ = this._cubeNameSubject.asObservable();
+
   private _selectedRowsSubject = new BehaviorSubject<string[]>([]);
   public selectedRows$ = this._selectedRowsSubject.asObservable();
 
@@ -81,7 +84,18 @@ export class PivickAnalysis {
           (cube) => cube.name === this.selectedCubeName,
         );
         if (cube.length > 0) {
-          this._cubeSchemaSubject.next(cube[0]);
+          const selectedCube = cube[0];
+          this._cubeSchemaSubject.next(selectedCube);
+          if (
+            selectedCube.meta?.i18n &&
+            selectedCube.meta.i18n[this.config.locale]
+          ) {
+            this._cubeNameSubject.next(
+              selectedCube.meta.i18n[this.config.locale],
+            );
+          } else {
+            this._cubeNameSubject.next(selectedCube.name);
+          }
         } else {
           console.error(`Cube with name ${this.selectedCubeName} not found.`);
           this._cubeSchemaSubject.next(null);

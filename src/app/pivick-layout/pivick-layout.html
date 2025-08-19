@@ -29,6 +29,9 @@
   </div>
   <div class="pivick-content">
     <p-menubar [model]="[]">
+      <ng-template #start>
+        <p-tag>{{cubeName}}</p-tag>
+      </ng-template>
       <ng-template #end>
         <p-button
           icon="pi pi-sun"

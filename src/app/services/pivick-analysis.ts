@@ -233,4 +233,12 @@ export class PivickAnalysis {
     }
     return "N/A";
   }
+
+  isMeasureByKey(key: string): boolean {
+    return this.getMeasureByKey(key) !== undefined;
+  }
+
+  isDimensionByKey(key: string): boolean {
+    return this.getDimensionByKey(key) !== undefined;
+  }
 }

@@ -14,7 +14,12 @@
   <ng-template #header>
     <tr>
       @for (column of tableColumns; track column) {
-      <th>{{ pivickAnalysis.getLabelByKey(column.key) }}</th>
+      <th
+        [class.dimension-column-header]="pivickAnalysis.isDimensionByKey(column.key)"
+        [class.measure-column-header]="pivickAnalysis.isMeasureByKey(column.key)"
+      >
+        {{ pivickAnalysis.getLabelByKey(column.key) }}
+      </th>
       }
     </tr>
   </ng-template>

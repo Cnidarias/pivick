@@ -1,15 +1,17 @@
 <p-table
+  [loading]="isLoading"
+  [paginator]="isPaginatorEnabled"
+  [resizableColumns]="true"
   [rowHover]="true"
+  [rowsPerPageOptions]="availableRowCounts"
+  [rows]="selectedRows"
   [scrollable]="true"
   [value]="tableData"
   class="pivick-table"
-  [rows]="selectedRows"
-  [rowsPerPageOptions]="availableRowCounts"
-  [paginator]="isPaginatorEnabled"
-  [loading]="isLoading"
   scrollHeight="100%"
-  stripedRows
+  showGridlines
   size="small"
+  stripedRows
 >
   <ng-template #header>
     <tr>

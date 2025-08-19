@@ -1,0 +1,38 @@
+name: Docker Image CI
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - "*"
+  workflow_dispatch:
+
+jobs:
+  push-store-image:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: "Checkout GitHub Action"
+        uses: actions/checkout@v4
+
+      - name: "Login to GitHub Container Registry"
+        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3.5.0
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+
+      - name: "Build Image"
+        run: |
+          docker build --tag ghcr.io/cnidarias/pivick:$BRANCH_NAME
+          docker push ghcr.io/cnidarias/pivick:$BRANCH_NAME

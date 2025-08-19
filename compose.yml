@@ -1,6 +1,22 @@
 services:
+  traefik:
+    image: "traefik:v3.5"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
   clickhouse:
     image: clickhouse/clickhouse-server
+    container_name: "clickhouse"
     ports:
       - "8123:8123"
       - "9000:9000"
@@ -11,14 +27,16 @@ services:
       CLICKHOUSE_USER: cnidarias
     volumes:
       - "./clickhouse/init.sh:/docker-entrypoint-initdb.d/init.sh"
-      - "./.data/ch_data:/var/lib/clickhouse"
-      - "./.data/ch_logs:/var/log/clickhouse-server"
+      - "clickhouse-data:/var/lib/clickhouse"
+      - "clickhouse-logs:/var/log/clickhouse-server"
     ulimits:
       nofile:
         soft: 262144
         hard: 262144
+
   cube:
     image: cubejs/cube
+    container_name: "cube"
     ports:
       - "4000:4000"
     environment:
@@ -30,3 +48,22 @@ services:
       CUBEJS_DB_PASS: cnidarias
     volumes:
       - "./cube/conf:/cube/conf"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cube.rule=Host(`pivick.localhost`) && PathPrefix(`/cubejs-api`)"
+      - "traefik.http.routers.cube.entrypoints=web"
+      - "traefik.http.services.cube.loadbalancer.server.port=4000"
+
+  pivick:
+    image: ghcr.io/cnidarias/pivick
+    build:
+      context: .
+    container_name: "pivick"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pivick.rule=Host(`pivick.localhost`)"
+      - "traefik.http.routers.pivick.entrypoints=web"
+
+volumes:
+  clickhouse-data:
+  clickhouse-logs:

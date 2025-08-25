@@ -1,19 +1,19 @@
-import { Component, inject } from "@angular/core";
-import { PivickLayoutComponent } from "./pivick-layout/pivick-layout";
-import { Config } from "./services/config";
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { Config } from './services/config';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.html",
-  styleUrls: ["./app.scss"],
-  standalone: true,
-  imports: [PivickLayoutComponent],
+  selector: 'app-root',
+  imports: [RouterOutlet],
+  templateUrl: './app.html',
+  styleUrl: './app.css',
 })
-export class AppComponent {
+export class App implements OnInit {
   private config: Config = inject(Config);
-  constructor() {
+
+  ngOnInit() {
     this.config.locale$.subscribe((locale) => {
-      console.log("Using locale", locale);
+      console.log('Using locale', locale);
     });
   }
 }

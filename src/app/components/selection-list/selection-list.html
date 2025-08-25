@@ -5,6 +5,21 @@
     <button class="btn btn-soft btn-error btn-xs"><ng-icon name="heroTrash"></ng-icon></button>
   </div>
 </div>
-<app-selection-list-box></app-selection-list-box>
-<app-selection-list-box></app-selection-list-box>
-<app-selection-list-box></app-selection-list-box>
+<app-selection-list-box
+  type="row"
+  [title]="'selectionlist.rows' | translate"
+  [elements]="rows"
+  (onElementDropped)="onElementAdd($event, 'row')"
+></app-selection-list-box>
+<app-selection-list-box
+  type="column"
+  [title]="'selectionlist.columns' | translate"
+  [elements]="columns"
+  (onElementDropped)="onElementAdd($event, 'column')"
+></app-selection-list-box>
+<app-selection-list-box
+  type="measure"
+  [title]="'selectionlist.measures' | translate"
+  [elements]="measures"
+  (onElementDropped)="onElementAdd($event, 'measure')"
+></app-selection-list-box>

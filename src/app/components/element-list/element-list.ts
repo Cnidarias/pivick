@@ -2,7 +2,13 @@ import { Component, inject, input, OnInit } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { PivickAnalysis } from '../../services/pivick-analysis';
-import { AvailableElement, TimeGranularity } from '../../types/pivick-types';
+import {
+  PivickElement,
+  PivickElementDragDropType,
+  PivickElementTypeDimensionDragDropType,
+  PivickElementTypeMeasureDragDropType,
+  TimeGranularity,
+} from '../../types/pivick-types';
 import { TCubeDimension, TCubeFolder } from '@cubejs-client/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -44,7 +50,7 @@ export class ElementList implements OnInit {
 
   cube = input.required<string>();
 
-  tree: Node<AvailableElement | undefined>[] = [];
+  tree: Node<PivickElement>[] = [];
 
   searchValue = '';
 
@@ -96,14 +102,14 @@ export class ElementList implements OnInit {
                 key: member.name,
                 visible: true,
                 expanded: true,
-              } as Node<AvailableElement>;
+              } as Node<PivickElement>;
             })
             .flat(),
         };
       });
   }
 
-  makeTimeDimensionEntries(dimension: TCubeDimension, caption: string): Node<AvailableElement>[] {
+  makeTimeDimensionEntries(dimension: TCubeDimension, caption: string): Node<PivickElement>[] {
     return Object.keys(TimeGranularity).map((timePart: string) => {
       const granularity = TimeGranularity[timePart as keyof typeof TimeGranularity] as string;
       const timePartLabel = this.translate.instant(`date.${granularity}`);
@@ -140,10 +146,22 @@ export class ElementList implements OnInit {
     });
   }
 
-  collapseChildren(folder: Node<AvailableElement | undefined>) {
+  collapseChildren(folder: Node<PivickElement>) {
     folder.expanded = !folder.expanded;
     folder?.children?.forEach((child) => {
       child.visible = folder.expanded;
     });
+  }
+
+  onDragStart($event: DragEvent, element: PivickElement) {
+    if (!element) {
+      return;
+    }
+    $event.dataTransfer?.setData(PivickElementDragDropType, JSON.stringify(element));
+    if (element.type === 'measure') {
+      $event.dataTransfer?.setData(PivickElementTypeMeasureDragDropType, element.type);
+    } else {
+      $event.dataTransfer?.setData(PivickElementTypeDimensionDragDropType, element.type);
+    }
   }
 }

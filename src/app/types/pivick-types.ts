@@ -1,4 +1,10 @@
-export type ElementType = 'dimension' | 'timedimension' | 'measure';
+export type PivickElementType = 'dimension' | 'timedimension' | 'measure';
+export type PivickSelector = 'row' | 'column' | 'measure';
+
+export enum OrderType {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
 
 export enum TimeGranularity {
   FULL = 'full',
@@ -12,11 +18,20 @@ export enum TimeGranularity {
   SECOND = 'second',
 }
 
-export type AvailableElement = {
-  caption: string;
-  granularity?: TimeGranularity;
-  name: string;
-  type: ElementType;
+export type PivickElement =
+  | {
+      caption: string;
+      granularity?: TimeGranularity;
+      name: string;
+      type: PivickElementType;
+    }
+  | undefined;
+
+export type SelectedPivickElement = PivickElement & {
+  orderIndex?: number;
+  orderDirection?: OrderType;
 };
 
-export type SelectedElement = AvailableElement & {};
+export const PivickElementDragDropType = 'pivick/element';
+export const PivickElementTypeDimensionDragDropType = 'pivick/element-type-dimension';
+export const PivickElementTypeMeasureDragDropType = 'pivick/element-type-measure';

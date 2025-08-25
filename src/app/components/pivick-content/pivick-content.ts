@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SelectedElement } from '../../types/pivick-types';
+import { SelectedPivickElement } from '../../types/pivick-types';
 import { ElementList } from '../element-list/element-list';
 import { SelectionList } from '../selection-list/selection-list';
 import { PivickTable } from '../pivick-table/pivick-table';
@@ -13,7 +13,7 @@ import { PivickTable } from '../pivick-table/pivick-table';
 export class PivickContent {
   protected selectedCubeName: string = 'uk_price_paid_view';
 
-  private rows: SelectedElement[] = [];
-  private cols: SelectedElement[] = [];
-  private measures: SelectedElement[] = [];
+  private rows: SelectedPivickElement[] = [];
+  private cols: SelectedPivickElement[] = [];
+  private measures: SelectedPivickElement[] = [];
 }

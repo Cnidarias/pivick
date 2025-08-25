@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, output, OutputEmitterRef } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { PivickAnalysis } from '../../services/pivick-analysis';
@@ -47,6 +47,8 @@ interface Node<T> {
 export class ElementList implements OnInit {
   protected pivickAnalysis: PivickAnalysis = inject(PivickAnalysis);
   protected translate: TranslateService = inject(TranslateService);
+
+  onElementDoubleClick: OutputEmitterRef<PivickElement> = output<PivickElement>();
 
   cube = input.required<string>();
 
@@ -191,5 +193,12 @@ export class ElementList implements OnInit {
     } else {
       $event.dataTransfer?.setData(PivickElementTypeDimensionDragDropType, element.type);
     }
+  }
+
+  onDoubleClick(_: MouseEvent, element: PivickElement) {
+    if (!element) {
+      return;
+    }
+    this.onElementDoubleClick.emit(element);
   }
 }

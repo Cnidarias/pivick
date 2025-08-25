@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { PivickElement, PivickSelector, SelectedPivickElement } from '../../types/pivick-types';
 import { ElementList } from '../element-list/element-list';
 import { PivickTable } from '../pivick-table/pivick-table';
@@ -6,6 +6,8 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { SelectionListBox } from '../selection-list-box/selection-list-box';
 import { TranslatePipe } from '@ngx-translate/core';
 import { heroTrash } from '@ng-icons/heroicons/outline';
+import { PivickAnalysis } from '../../services/pivick-analysis';
+import { ResultSet } from '@cubejs-client/core';
 
 @Component({
   selector: 'app-pivick-content',
@@ -15,11 +17,15 @@ import { heroTrash } from '@ng-icons/heroicons/outline';
   styleUrl: './pivick-content.css',
 })
 export class PivickContent {
+  protected pivickAnalysis: PivickAnalysis = inject(PivickAnalysis);
   protected selectedCubeName: string = 'uk_price_paid_view';
 
-  rows: PivickElement[] = [];
-  columns: PivickElement[] = [];
-  measures: PivickElement[] = [];
+  rows: SelectedPivickElement[] = [];
+  columns: SelectedPivickElement[] = [];
+  measures: SelectedPivickElement[] = [];
+
+  isLoading = false;
+  data?: ResultSet;
 
   onElementAdd($event: [PivickElement, idx: number], target: PivickSelector) {
     const [element, idx] = $event;
@@ -27,7 +33,7 @@ export class PivickContent {
       return;
     }
     const list = target === 'row' ? this.rows : target === 'column' ? this.columns : this.measures;
-    list.splice(idx, 0, element);
+    list.splice(idx, 0, element as SelectedPivickElement);
     if (target === 'row') {
       this.rows = [...this.rows];
     } else if (target === 'column') {
@@ -35,13 +41,44 @@ export class PivickContent {
     } else {
       this.measures = [...this.measures];
     }
+
+    this.updateData();
   }
 
-  checkIfAlreadyInReport(element: PivickElement): boolean {
+  onElementDoubleClick($event: PivickElement) {
+    if (this.checkIfAlreadyInReport($event)) {
+      return;
+    }
+    if ($event!.type === 'measure') {
+      this.measures = [...this.measures, $event as SelectedPivickElement];
+    } else {
+      this.rows = [...this.rows, $event as SelectedPivickElement];
+    }
+    this.updateData();
+  }
+
+  private checkIfAlreadyInReport(element: PivickElement): boolean {
     return !!(
       this.rows.find((e) => e?.name === element?.name) ||
       this.columns.find((e) => e?.name === element?.name) ||
       this.measures.find((e) => e?.name === element?.name)
     );
+  }
+
+  protected updateData() {
+    this.isLoading = true;
+    this.pivickAnalysis
+      .loadData(this.selectedCubeName, this.rows, this.columns, this.measures)
+      .subscribe({
+        next: (data) => {
+          this.data = data;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error(err);
+          this.data = undefined;
+          this.isLoading = false;
+        },
+      });
   }
 }

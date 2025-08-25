@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { CubeClient } from '@cubejs-client/ngx';
 import { Config } from './config';
-import { BehaviorSubject } from 'rxjs';
-import { Cube, Meta, TCubeDimension, TCubeMeasure } from '@cubejs-client/core';
-import { PivickElementType, SelectedPivickElement } from '../types/pivick-types';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Cube, Meta, Query, ResultSet, TCubeDimension, TCubeMeasure } from '@cubejs-client/core';
+import { PivickElement, PivickElementType, SelectedPivickElement } from '../types/pivick-types';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
@@ -34,10 +34,19 @@ export class PivickAnalysis {
 
   loadData(
     cubeName: string,
-    rows: SelectedPivickElement[],
-    cols: SelectedPivickElement[],
-    measures: SelectedPivickElement[],
-  ) {}
+    rows: PivickElement[],
+    cols: PivickElement[],
+    measures: PivickElement[],
+  ): Observable<ResultSet> {
+    const query: Query = {
+      measures: measures.map((m) => m!.name),
+      dimensions: [...rows.map((r) => r!.name), ...cols.map((c) => c!.name)],
+      order: [],
+      total: true,
+    };
+
+    return this.cube.load(query);
+  }
 
   getCubeByName(name: string): Cube | undefined {
     const schema = this._cubeSchemaSubject.getValue();
@@ -70,29 +79,42 @@ export class PivickAnalysis {
    * @param type
    * @param name
    */
-  getCaptionByName(cubeName: string, type: PivickElementType, name: string): string {
-    const notAvailableCaption = this.translate.instant('notavailable');
+  getCaptionByNameAndType(
+    cubeName: string,
+    type: PivickElementType,
+    name: string,
+  ): string | undefined {
     const cube = this.getCubeByName(cubeName);
 
     if (!cube) {
       console.warn(`getCaptionByName(): No cube found with the name '${cubeName}'`);
-      return notAvailableCaption;
+      return undefined;
     }
 
     if (type === 'measure') {
       const measure = this.getMeasureByName(cube, name);
       if (!measure) {
-        console.warn(`getCaptionByName(): No measure with name '${name}'`);
-        return notAvailableCaption;
+        return undefined;
       }
       return this.getCaption(measure);
     } else {
       const dimension = this.getDimensionByName(cube, name);
       if (!dimension) {
-        console.warn(`getCaptionByName(): No dimension with name '${name}'`);
-        return notAvailableCaption;
+        return undefined;
       }
       return this.getCaption(dimension);
     }
+  }
+
+  getCaptionByName(cubeName: string, name: string): string {
+    const measureName = this.getCaptionByNameAndType(cubeName, 'measure', name);
+    if (measureName) {
+      return measureName;
+    }
+    const dimensionName = this.getCaptionByNameAndType(cubeName, 'dimension', name);
+    if (dimensionName) {
+      return dimensionName;
+    }
+    return name;
   }
 }

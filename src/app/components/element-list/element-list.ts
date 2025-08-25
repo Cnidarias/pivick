@@ -9,7 +9,7 @@ import {
   PivickElementTypeMeasureDragDropType,
   TimeGranularity,
 } from '../../types/pivick-types';
-import { TCubeDimension, TCubeFolder } from '@cubejs-client/core';
+import { TCubeDimension, TCubeFolder, TCubeMeasure } from '@cubejs-client/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   heroCalendar,
@@ -107,6 +107,34 @@ export class ElementList implements OnInit {
             .flat(),
         };
       });
+
+    this.tree.push({
+      caption: this.translate.instant('measures'),
+      data: undefined,
+      key: 'measures',
+      expanded: true,
+      visible: true,
+      icon: '',
+      children: cube.measures
+        .sort((a: TCubeMeasure, b: TCubeMeasure) =>
+          this.pivickAnalysis.getCaption(a).localeCompare(this.pivickAnalysis.getCaption(b)),
+        )
+        .map((member: TCubeMeasure) => {
+          const caption = this.pivickAnalysis.getCaption(member);
+          return {
+            caption,
+            icon: 'heroPresentationChartLine',
+            data: {
+              caption,
+              name: member.name,
+              type: 'measure',
+            },
+            key: member.name,
+            visible: true,
+            expanded: true,
+          } as Node<PivickElement>;
+        }),
+    });
   }
 
   makeTimeDimensionEntries(dimension: TCubeDimension, caption: string): Node<PivickElement>[] {

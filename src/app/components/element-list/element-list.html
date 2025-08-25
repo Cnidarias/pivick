@@ -30,6 +30,7 @@
         class="p-2 pl-6 pb-2 text-sm tracking-wide select-none hover:bg-accent hover:cursor-grab flex flex-row"
         draggable="true"
         (dragstart)="onDragStart($event, element.data)"
+        (dblclick)="onDoubleClick($event, element.data)"
       >
         <div class="flex flex-col justify-center mr-1">
           <ng-icon

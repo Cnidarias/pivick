@@ -1,1 +1,36 @@
-<p>pivick-table works!</p>
+<div
+  class="flex-1 overflow-auto p-2 pt-0 rounded-box border border-base-content/5 bg-base-100"
+>
+<table class="table table-sm table-pin-rows">
+  <thead>
+    <tr>
+        @for (column of tableColumns; track column.key) {
+          <th
+            class="cursor-pointer items-center"
+            [class]="{'bg-accent': !isMeasureColumn(column), 'text-accent-content': !isMeasureColumn(column), 'bg-info': isMeasureColumn(column), 'text-info-content': isMeasureColumn(column)}"
+          >
+            @if (true) {
+                <ng-icon name="heroArrowLongUp"></ng-icon>
+            }
+            <span>
+              {{pivickAnalysis.getCaptionByName(cubeName(), column.key)}}
+            </span>
+          </th>
+        }
+    </tr>
+  </thead>
+  <tbody>
+    @for (row of tableData; track $index) {
+    <tr class="hover:bg-accent-content">
+      @for (column of tableColumns; track column.key) {
+        <td
+          [class]="{'bg-info/5': isMeasureColumn(column), 'bg-accent/5': !isMeasureColumn(column)}"
+        >
+          {{row[column.key]}}
+        </td>
+      }
+    </tr>
+    }
+  </tbody>
+</table>
+</div>

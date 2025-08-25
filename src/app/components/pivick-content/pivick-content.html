@@ -1,4 +1,8 @@
-<app-element-list [cube]="selectedCubeName"></app-element-list>
+<app-element-list
+  [cube]="selectedCubeName"
+  (onElementDoubleClick)="onElementDoubleClick($event)"
+>
+</app-element-list>
 <div class="divider divider-horizontal m-px w-[2px]!"></div>
 <div>
   <div class="navbar bg-base-100 shadow-sm min-h-[3rem]!">
@@ -28,4 +32,23 @@
   ></app-selection-list-box>
 </div>
 <div class="divider divider-horizontal m-px w-[2px]!"></div>
-<app-pivick-table></app-pivick-table>
+<div class="flex-1 flex flex-col">
+  <div class="navbar bg-base-100 shadow-sm min-h-[3rem]!">
+    <div class="flex-none"></div>
+    <div class="flex-1"></div>
+    <div class="flex-none">
+      @if (isLoading) {
+        <span class="pr-2">{{ 'loading' | translate }}</span>
+        <span class="loading loading-dots loading-xl mr-2"></span>
+      }
+    </div>
+  </div>
+  <app-pivick-table
+    [cubeName]="selectedCubeName"
+    [rows]="rows"
+    [columns]="columns"
+    [measures]="measures"
+    [data]="data"
+  ></app-pivick-table>
+
+</div>

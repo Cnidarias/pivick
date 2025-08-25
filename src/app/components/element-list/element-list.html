@@ -1,0 +1,46 @@
+<div class="flex flex-1 flex-col p-2">
+  <input
+    [(ngModel)]="searchValue"
+    (input)="onSearchChange($event)"
+    type="search"
+    [placeholder]=" 'search' | translate"
+    class="input"
+  />
+
+  <ul class="list bg-base-100 rounded-box shadow-md overflow-auto">
+    @for (folder of tree; track folder.key) {
+    <ul>
+      @if (folder.visible) {
+      <li class="p-4 pb-2 text-xs opacity-60 tracking-wide flex flex-row">
+        <div class="flex flex-col justify-center mr-1">
+          <ng-icon
+            style="vertical-align: bottom !important"
+            (click)="collapseChildren(folder)"
+            class="align-bottom hover:cursor-pointer"
+            [name]="folder.expanded ? 'heroChevronDown' : 'heroChevronRight'"
+            size="16px"
+          >
+          </ng-icon>
+        </div>
+        <span class="flex-1">{{folder.caption}}</span>
+      </li>
+      } @for(element of folder.children; track element) { @if (element.visible) {
+      <li
+        class="p-2 pl-6 pb-2 text-sm tracking-wide select-none hover:bg-accent hover:cursor-grab flex flex-row"
+      >
+        <div class="flex flex-col justify-center mr-1">
+          <ng-icon
+            style="vertical-align: bottom !important"
+            class="align-bottom hover:cursor-pointer"
+            [name]="element?.icon || ''"
+            size="16px"
+          >
+          </ng-icon>
+        </div>
+        <span class="flex-1">{{element.caption}}</span>
+      </li>
+      } }
+    </ul>
+    }
+  </ul>
+</div>

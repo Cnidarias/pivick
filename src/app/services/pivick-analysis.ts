@@ -1,105 +1,30 @@
-import { inject, Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { CubeClient } from "@cubejs-client/ngx";
-import {
-  Cube,
-  Meta,
-  Query,
-  QueryOrder,
-  ResultSet,
-  TCubeDimension,
-  TCubeMeasure,
-  TQueryOrderArray,
-  TQueryOrderObject,
-} from "@cubejs-client/core";
-import { Config } from "./config";
+import { inject, Injectable } from '@angular/core';
+import { CubeClient } from '@cubejs-client/ngx';
+import { Config } from './config';
+import { BehaviorSubject } from 'rxjs';
+import { Cube, Meta, TCubeDimension, TCubeMeasure } from '@cubejs-client/core';
+import { ElementType, SelectedElement } from '../types/pivick-types';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class PivickAnalysis {
   private cube: CubeClient = inject(CubeClient);
+  private translate: TranslateService = inject(TranslateService);
   private config: Config = inject(Config);
 
-  private selectedCubeName: string = "uk_price_paid_view";
-
-  private _cubeSchemaSubject = new BehaviorSubject<Cube | null>(null);
+  private _cubeSchemaSubject = new BehaviorSubject<Meta | null>(null);
   public cubeSchema$ = this._cubeSchemaSubject.asObservable();
 
-  private _cubeNameSubject = new BehaviorSubject<string>(this.selectedCubeName);
-  public cubeName$ = this._cubeNameSubject.asObservable();
-
-  private _selectedRowsSubject = new BehaviorSubject<string[]>([]);
-  public selectedRows$ = this._selectedRowsSubject.asObservable();
-
-  private _selectedColumnsSubject = new BehaviorSubject<string[]>([]);
-  public selectedColumns$ = this._selectedColumnsSubject.asObservable();
-
-  private _selectedMeasuresSubject = new BehaviorSubject<string[]>([]);
-  public selectedMeasures$ = this._selectedMeasuresSubject.asObservable();
-
-  private _cubeDataSubject = new BehaviorSubject<ResultSet | null>(null);
-  public cubeData$ = this._cubeDataSubject.asObservable();
-
-  private _areLoadingDataSubject = new BehaviorSubject<boolean>(false);
-  public areLoadingData$ = this._areLoadingDataSubject.asObservable();
-
-  updateData() {
-    const selectedMeasures = [...this._selectedMeasuresSubject.getValue()];
-    const selectedDims = [
-      ...this._selectedRowsSubject.getValue(),
-      ...this._selectedColumnsSubject.getValue(),
-    ];
-
-    const everything = [...selectedDims, ...selectedMeasures];
-
-    if (everything.length === 0) {
-      this._cubeDataSubject.next(null);
-      return;
-    }
-
-    const orders: TQueryOrderObject = Object.fromEntries(
-      everything.map((k) => [k, "desc"]),
-    );
-
-    const query: Query = {
-      measures: selectedMeasures,
-      dimensions: selectedDims,
-      order: orders,
-      total: true,
-    };
-
-    this._areLoadingDataSubject.next(true);
-
-    this.cube.load(query).subscribe((result) => {
-      this._cubeDataSubject.next(result);
-      this._areLoadingDataSubject.next(false);
-    });
+  constructor() {
+    this.loadSchema();
   }
 
   loadSchema() {
     this.cube.meta().subscribe({
       next: (meta: Meta) => {
-        const cube = meta.cubes.filter(
-          (cube) => cube.name === this.selectedCubeName,
-        );
-        if (cube.length > 0) {
-          const selectedCube = cube[0];
-          this._cubeSchemaSubject.next(selectedCube);
-          if (
-            selectedCube.meta?.i18n &&
-            selectedCube.meta.i18n[this.config.locale]
-          ) {
-            this._cubeNameSubject.next(
-              selectedCube.meta.i18n[this.config.locale],
-            );
-          } else {
-            this._cubeNameSubject.next(selectedCube.name);
-          }
-        } else {
-          console.error(`Cube with name ${this.selectedCubeName} not found.`);
-          this._cubeSchemaSubject.next(null);
-        }
+        this._cubeSchemaSubject.next(meta);
       },
       error: (err) => {
         console.error(err);
@@ -107,166 +32,67 @@ export class PivickAnalysis {
     });
   }
 
-  addRow(row: string) {
-    const currentRows = this._selectedRowsSubject.getValue();
-    if (!currentRows.includes(row)) {
-      this._selectedRowsSubject.next([...currentRows, row]);
-      this.updateData();
-    }
-  }
+  loadData(
+    cubeName: string,
+    rows: SelectedElement[],
+    cols: SelectedElement[],
+    measures: SelectedElement[],
+  ) {}
 
-  removeRow(row: string) {
-    const currentRows = this._selectedRowsSubject.getValue();
-    this._selectedRowsSubject.next(currentRows.filter((r) => r !== row));
-    this.updateData();
-  }
-
-  clearRows(update: boolean) {
-    this._selectedRowsSubject.next([]);
-    if (update) {
-      this.updateData();
-    }
-  }
-
-  getRows() {
-    return [...this._selectedRowsSubject.getValue()];
-  }
-
-  setRows(rows: string[]) {
-    this._selectedRowsSubject.next(rows);
-    this.updateData();
-  }
-
-  addColumn(column: string) {
-    const currentColumns = this._selectedColumnsSubject.getValue();
-    if (!currentColumns.includes(column)) {
-      this._selectedColumnsSubject.next([...currentColumns, column]);
-      this.updateData();
-    }
-  }
-
-  removeColumn(column: string) {
-    const currentColumns = this._selectedColumnsSubject.getValue();
-    this._selectedColumnsSubject.next(
-      currentColumns.filter((c) => c !== column),
-    );
-    this.updateData();
-  }
-
-  clearColumns(update: boolean) {
-    this._selectedColumnsSubject.next([]);
-    if (update) {
-      this.updateData();
-    }
-  }
-
-  getColumns() {
-    return [...this._selectedColumnsSubject.getValue()];
-  }
-
-  setColumns(columns: string[]) {
-    this._selectedColumnsSubject.next(columns);
-    this.updateData();
-  }
-
-  addMeasure(measure: string) {
-    const currentMeasures = this._selectedMeasuresSubject.getValue();
-    if (!currentMeasures.includes(measure)) {
-      this._selectedMeasuresSubject.next([...currentMeasures, measure]);
-      this.updateData();
-    }
-  }
-
-  removeMeasure(measure: string) {
-    const currentMeasures = this._selectedMeasuresSubject.getValue();
-    this._selectedMeasuresSubject.next(
-      currentMeasures.filter((m) => m !== measure),
-    );
-    this.updateData();
-  }
-
-  clearMeasures(update: boolean) {
-    this._selectedMeasuresSubject.next([]);
-    if (update) {
-      this.updateData();
-    }
-  }
-
-  getMeasures() {
-    return [...this._selectedMeasuresSubject.getValue()];
-  }
-
-  setMeasures(measures: string[]) {
-    this._selectedMeasuresSubject.next(measures);
-    this.updateData();
-  }
-
-  resetReport() {
-    this.clearRows(false);
-    this.clearColumns(false);
-    this.clearMeasures(false);
-    this._cubeDataSubject.next(null);
-    this._areLoadingDataSubject.next(false);
-  }
-
-  getDimensionByKey(name: string): TCubeDimension | undefined {
+  getCubeByName(name: string): Cube | undefined {
     const schema = this._cubeSchemaSubject.getValue();
     if (!schema) {
       return undefined;
     }
-    return schema.dimensions.find((dimension) => {
-      return dimension.name === name;
-    });
+    return schema.cubes.find((cube) => cube.name === name);
   }
 
-  getMeasureByKey(name: string): TCubeMeasure | undefined {
-    const schema = this._cubeSchemaSubject.getValue();
-    if (!schema) {
-      return undefined;
-    }
-    return schema.measures.find((measure) => {
-      return measure.name === name;
-    });
+  getDimensionByName(cube: Cube, name: string): TCubeDimension | undefined {
+    return cube.dimensions.find((dimension) => dimension.name === name);
   }
 
-  getDimensionOrMeasureByKey(
-    key: string,
-  ): TCubeDimension | TCubeMeasure | undefined {
-    let dimension = this.getDimensionByKey(key);
-    if (dimension) {
-      return dimension;
-    }
-    let measure = this.getMeasureByKey(key);
-    if (measure) {
-      return measure;
-    }
-    return undefined;
+  getMeasureByName(cube: Cube, name: string): TCubeMeasure | undefined {
+    return cube.measures.find((measure) => measure.name === name);
   }
 
-  getLabel(member: TCubeDimension | TCubeMeasure): string {
-    if (member.meta?.i18n && member.meta.i18n[this.config.locale]) {
-      return member.meta.i18n[this.config.locale];
+  getCaption(element: TCubeDimension | TCubeMeasure): string {
+    if (element.meta?.i18n && element.meta.i18n[this.config.locale]) {
+      return element.meta.i18n[this.config.locale];
     }
-    return member.shortTitle;
+    return element.shortTitle;
   }
 
-  getLabelByKey(key: string): string {
-    let dimension = this.getDimensionByKey(key);
-    if (dimension) {
-      return this.getLabel(dimension);
-    }
-    let measure = this.getMeasureByKey(key);
-    if (measure) {
-      return this.getLabel(measure);
-    }
-    return "N/A";
-  }
+  /**
+   * Gets the caption of an element using the type of the element, the name of the element and which cube it belongs
+   * to
+   *
+   * @param cubeName
+   * @param type
+   * @param name
+   */
+  getCaptionByName(cubeName: string, type: ElementType, name: string): string {
+    const notAvailableCaption = this.translate.instant('notavailable');
+    const cube = this.getCubeByName(cubeName);
 
-  isMeasureByKey(key: string): boolean {
-    return this.getMeasureByKey(key) !== undefined;
-  }
+    if (!cube) {
+      console.warn(`getCaptionByName(): No cube found with the name '${cubeName}'`);
+      return notAvailableCaption;
+    }
 
-  isDimensionByKey(key: string): boolean {
-    return this.getDimensionByKey(key) !== undefined;
+    if (type === 'measure') {
+      const measure = this.getMeasureByName(cube, name);
+      if (!measure) {
+        console.warn(`getCaptionByName(): No measure with name '${name}'`);
+        return notAvailableCaption;
+      }
+      return this.getCaption(measure);
+    } else {
+      const dimension = this.getDimensionByName(cube, name);
+      if (!dimension) {
+        console.warn(`getCaptionByName(): No dimension with name '${name}'`);
+        return notAvailableCaption;
+      }
+      return this.getCaption(dimension);
+    }
   }
 }

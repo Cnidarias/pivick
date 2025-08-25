@@ -1,0 +1,5 @@
+:host {
+  max-width: 200px;
+  display: flex;
+  height: 100%;
+}

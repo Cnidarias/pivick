@@ -1,28 +1,26 @@
-import { inject, Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { ActivatedRoute } from "@angular/router";
-import { TranslateService } from "@ngx-translate/core";
+import { inject, Injectable } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class Config {
   private activatedRoute = inject(ActivatedRoute);
   private translate = inject(TranslateService);
 
-  private _localeSubject: BehaviorSubject<string> = new BehaviorSubject<string>(
-    "en",
-  );
+  private _localeSubject: BehaviorSubject<string> = new BehaviorSubject<string>('en');
   public locale$ = this._localeSubject.asObservable();
   public locale = this._localeSubject.getValue();
 
   constructor() {
-    this.translate.addLangs(["de", "en"]);
-    this.translate.setFallbackLang("en");
-    this.translate.use("en");
+    this.translate.addLangs(['de', 'en']);
+    this.translate.setFallbackLang('en');
+    this.translate.use('en');
 
     this.activatedRoute.queryParams.subscribe((params) => {
-      const lang = params["locale"];
+      const lang = params['locale'];
       if (lang && this.translate.getLangs().includes(lang)) {
         this.translate.use(lang);
         // Update the locale subject to notify subscribers

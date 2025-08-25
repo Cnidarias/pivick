@@ -1,4 +1,5 @@
 {
+  "columns": "Spalten",
   "date.day": "Tag",
   "date.full": "Gesamt",
   "date.hour": "Stunde",
@@ -8,12 +9,11 @@
   "date.second": "Sekunde",
   "date.week": "Woche",
   "date.year": "Jahr",
+  "measures": "Messwerte",
   "menu.clearReport": "Bericht zurücksetzen",
+  "rows": "Zeilen",
   "search": "Suchen",
-  "selectionlist.columns": "Spalten",
   "selectionlist.emptyDimensionList": "Leer - Bitte eine Dimension auswählen",
   "selectionlist.emptyMeasureList": "Leer - Bitte einen Messwert auswählen",
-  "selectionlist.measures": "Messwerte",
-  "selectionlist.removeFromSelection": "Auswahl entfernen",
-  "selectionlist.rows": "Zeilen"
+  "selectionlist.removeFromSelection": "Auswahl entfernen"
 }

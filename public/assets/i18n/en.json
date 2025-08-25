@@ -1,4 +1,5 @@
 {
+  "columns": "Columns",
   "date.day": "Day",
   "date.full": "Full",
   "date.hour": "Hour",
@@ -8,12 +9,11 @@
   "date.second": "Second",
   "date.week": "Week",
   "date.year": "Year",
+  "measures": "Measures",
   "menu.clearReport": "Reset Report",
+  "rows": "Rows",
   "search": "Search",
-  "selectionlist.columns": "Columns",
   "selectionlist.emptyDimensionList": "Empty - Please select a dimension",
   "selectionlist.emptyMeasureList": "Empty - Please select a measure",
-  "selectionlist.measures": "Measures",
-  "selectionlist.removeFromSelection": "Remove from report",
-  "selectionlist.rows": "Rows"
+  "selectionlist.removeFromSelection": "Remove from report"
 }

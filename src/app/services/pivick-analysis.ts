@@ -3,7 +3,7 @@ import { CubeClient } from '@cubejs-client/ngx';
 import { Config } from './config';
 import { BehaviorSubject } from 'rxjs';
 import { Cube, Meta, TCubeDimension, TCubeMeasure } from '@cubejs-client/core';
-import { ElementType, SelectedElement } from '../types/pivick-types';
+import { PivickElementType, SelectedPivickElement } from '../types/pivick-types';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
@@ -34,9 +34,9 @@ export class PivickAnalysis {
 
   loadData(
     cubeName: string,
-    rows: SelectedElement[],
-    cols: SelectedElement[],
-    measures: SelectedElement[],
+    rows: SelectedPivickElement[],
+    cols: SelectedPivickElement[],
+    measures: SelectedPivickElement[],
   ) {}
 
   getCubeByName(name: string): Cube | undefined {
@@ -70,7 +70,7 @@ export class PivickAnalysis {
    * @param type
    * @param name
    */
-  getCaptionByName(cubeName: string, type: ElementType, name: string): string {
+  getCaptionByName(cubeName: string, type: PivickElementType, name: string): string {
     const notAvailableCaption = this.translate.instant('notavailable');
     const cube = this.getCubeByName(cubeName);
 

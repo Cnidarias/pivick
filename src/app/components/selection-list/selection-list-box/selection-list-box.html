@@ -1,1 +1,17 @@
-<p>selection-list-box works!</p>
+<h3>{{ title() }}</h3>
+<ul
+  class="list min-w-40 min-h-40 bg-base-100 rounded-box shadow-md overflow-auto border-2 m-2 flex flex-col"
+  [ngClass]="elements().length === 0 ? 'justify-center' : 'justify-start'"
+  (dragover)="onDragOver($event)"
+  (drop)="onDrop($event)"
+>
+  @if (elements().length === 0) {
+  <div class="self-center text-xs">empty</div>
+  } @for (element of elements(); track element!.name) {
+  <li
+    class="p-2 pb-2 text-sm tracking-wide select-none hover:bg-accent hover:cursor-grab flex flex-row"
+  >
+    <span class="flex-1">{{element!.caption}}</span>
+  </li>
+  }
+</ul>

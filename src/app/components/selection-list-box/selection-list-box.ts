@@ -5,7 +5,7 @@ import {
   PivickElementTypeDimensionDragDropType,
   PivickElementTypeMeasureDragDropType,
   PivickSelector,
-} from '../../../types/pivick-types';
+} from '../../types/pivick-types';
 import { NgClass } from '@angular/common';
 
 @Component({

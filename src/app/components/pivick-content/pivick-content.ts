@@ -59,8 +59,10 @@ export class PivickContent {
 
   private checkIfAlreadyInReport(element: PivickElement): boolean {
     return !!(
-      this.rows.find((e) => e?.name === element?.name) ||
-      this.columns.find((e) => e?.name === element?.name) ||
+      this.rows.find((e) => e?.name === element?.name && e?.granularity == element?.granularity) ||
+      this.columns.find(
+        (e) => e?.name === element?.name && e?.granularity == element?.granularity,
+      ) ||
       this.measures.find((e) => e?.name === element?.name)
     );
   }

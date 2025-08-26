@@ -34,13 +34,37 @@ export class PivickAnalysis {
 
   loadData(
     cubeName: string,
-    rows: PivickElement[],
-    cols: PivickElement[],
-    measures: PivickElement[],
+    rows: SelectedPivickElement[],
+    cols: SelectedPivickElement[],
+    measures: SelectedPivickElement[],
   ): Observable<ResultSet> {
+    const dimensions = [
+      ...rows
+        .filter(
+          (r) =>
+            r!.type === 'dimension' || (r!.type === 'timedimension' && r!.granularity === 'full'),
+        )
+        .map((r) => r!.name),
+      ...cols
+        .filter(
+          (c) =>
+            c!.type === 'dimension' || (c!.type === 'timedimension' && c!.granularity === 'full'),
+        )
+        .map((c) => c!.name),
+    ];
+
+    const timeDimensions = [
+      ...rows
+        .filter((r) => r!.type === 'timedimension' && r!.granularity !== 'full')
+        .map((r) => {
+          return { dimension: r!.name, granularity: r!.granularity };
+        }),
+    ];
+
     const query: Query = {
       measures: measures.map((m) => m!.name),
-      dimensions: [...rows.map((r) => r!.name), ...cols.map((c) => c!.name)],
+      dimensions,
+      timeDimensions,
       order: [],
       total: true,
     };

@@ -71,6 +71,11 @@ export class PivickContent {
 
   protected updateData() {
     this.isLoading = true;
+    if (this.rows.length === 0 && this.columns.length === 0 && this.measures.length === 0) {
+      this.data = undefined;
+      this.isLoading = false;
+      return;
+    }
     this.pivickAnalysis
       .loadData(this.selectedCubeName, this.rows, this.columns, this.measures)
       .subscribe({

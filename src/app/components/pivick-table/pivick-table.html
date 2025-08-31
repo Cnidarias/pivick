@@ -21,7 +21,7 @@
   </thead>
   <tbody>
     @for (row of tableData; track $index) {
-    <tr class="hover:bg-accent-content">
+    <tr class="hover:bg-accent-content hover:text-accent">
       @for (column of tableColumns; track column.key) {
         <td
           [class]="{'bg-info/5': isMeasureColumn(column), 'bg-accent/5': !isMeasureColumn(column)}"

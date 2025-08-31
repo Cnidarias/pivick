@@ -7,13 +7,13 @@ import {
   PivickSelector,
 } from '../../types/pivick-types';
 import { NgClass } from '@angular/common';
-import {NgIcon, provideIcons} from '@ng-icons/core';
-import {heroXMark} from '@ng-icons/heroicons/outline';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroXMark } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-selection-list-box',
   imports: [NgClass, NgIcon],
-  providers: [provideIcons({heroXMark})],
+  providers: [provideIcons({ heroXMark })],
   templateUrl: './selection-list-box.html',
   styleUrl: './selection-list-box.css',
 })
@@ -25,7 +25,8 @@ export class SelectionListBox {
   onElementAdd: OutputEmitterRef<[PivickElement, idx: number]> =
     output<[PivickElement, idx: number]>();
 
-  onElementRemove: OutputEmitterRef<[PivickElement, idx: number]> = output<[PivickElement, idx: number]>();
+  onElementRemove: OutputEmitterRef<[PivickElement, idx: number]> =
+    output<[PivickElement, idx: number]>();
 
   onDragOver($event: DragEvent) {
     if (!$event.dataTransfer) {

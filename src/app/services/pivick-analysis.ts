@@ -3,7 +3,12 @@ import { CubeClient } from '@cubejs-client/ngx';
 import { Config } from './config';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Cube, Meta, Query, ResultSet, TCubeDimension, TCubeMeasure } from '@cubejs-client/core';
-import { PivickElement, PivickElementType, SelectedPivickElement } from '../types/pivick-types';
+import {
+  PivickElement,
+  PivickElementType,
+  SelectedPivickElement,
+  TimeGranularity,
+} from '../types/pivick-types';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
@@ -88,11 +93,16 @@ export class PivickAnalysis {
     return cube.measures.find((measure) => measure.name === name);
   }
 
-  getCaption(element: TCubeDimension | TCubeMeasure): string {
+  getCaption(element: TCubeDimension | TCubeMeasure, granularity?: TimeGranularity): string {
+    let caption = element.shortTitle;
     if (element.meta?.i18n && element.meta.i18n[this.config.locale]) {
-      return element.meta.i18n[this.config.locale];
+      caption = element.meta.i18n[this.config.locale];
     }
-    return element.shortTitle;
+    if (element.type === 'time' && granularity) {
+      const timePartLabel = this.translate.instant(`date.${granularity}`);
+      caption = `${caption} - ${timePartLabel}`;
+    }
+    return caption;
   }
 
   /**
@@ -102,11 +112,13 @@ export class PivickAnalysis {
    * @param cubeName
    * @param type
    * @param name
+   * @param granularity
    */
   getCaptionByNameAndType(
     cubeName: string,
     type: PivickElementType,
     name: string,
+    granularity?: TimeGranularity,
   ): string | undefined {
     const cube = this.getCubeByName(cubeName);
 
@@ -126,16 +138,16 @@ export class PivickAnalysis {
       if (!dimension) {
         return undefined;
       }
-      return this.getCaption(dimension);
+      return this.getCaption(dimension, granularity);
     }
   }
 
-  getCaptionByName(cubeName: string, name: string): string {
+  getCaptionByName(cubeName: string, name: string, granularity?: TimeGranularity): string {
     const measureName = this.getCaptionByNameAndType(cubeName, 'measure', name);
     if (measureName) {
       return measureName;
     }
-    const dimensionName = this.getCaptionByNameAndType(cubeName, 'dimension', name);
+    const dimensionName = this.getCaptionByNameAndType(cubeName, 'dimension', name, granularity);
     if (dimensionName) {
       return dimensionName;
     }

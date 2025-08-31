@@ -7,7 +7,7 @@
 >
   @if (elements().length === 0) {
   <div class="self-center text-xs">empty</div>
-  } @for (element of elements(); track element!.name) {
+  } @for (element of elements(); track $index) {
   <li
     class="p-2 pb-2 text-sm tracking-wide select-none hover:bg-accent hover:cursor-grab flex flex-row"
   >

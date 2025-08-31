@@ -34,13 +34,15 @@ export class PivickContent {
     }
     const list = target === 'row' ? this.rows : target === 'column' ? this.columns : this.measures;
     list.splice(idx, 0, element as SelectedPivickElement);
-    if (target === 'row') {
-      this.rows = [...this.rows];
-    } else if (target === 'column') {
-      this.columns = [...this.columns];
-    } else {
-      this.measures = [...this.measures];
-    }
+
+    this.updateData();
+  }
+
+  onElementRemove($event: [PivickElement, idx: number], target: PivickSelector) {
+    const [element, idx] = $event;
+
+    let list = target === 'row' ? this.rows : target === 'column' ? this.columns : this.measures;
+    list.splice(idx, 1);
 
     this.updateData();
   }

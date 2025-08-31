@@ -7,10 +7,13 @@ import {
   PivickSelector,
 } from '../../types/pivick-types';
 import { NgClass } from '@angular/common';
+import {NgIcon, provideIcons} from '@ng-icons/core';
+import {heroXMark} from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-selection-list-box',
-  imports: [NgClass],
+  imports: [NgClass, NgIcon],
+  providers: [provideIcons({heroXMark})],
   templateUrl: './selection-list-box.html',
   styleUrl: './selection-list-box.css',
 })
@@ -19,8 +22,10 @@ export class SelectionListBox {
   type: InputSignal<PivickSelector> = input.required<PivickSelector>();
   elements: InputSignal<PivickElement[]> = input.required<PivickElement[]>();
 
-  onElementDropped: OutputEmitterRef<[PivickElement, idx: number]> =
+  onElementAdd: OutputEmitterRef<[PivickElement, idx: number]> =
     output<[PivickElement, idx: number]>();
+
+  onElementRemove: OutputEmitterRef<[PivickElement, idx: number]> = output<[PivickElement, idx: number]>();
 
   onDragOver($event: DragEvent) {
     if (!$event.dataTransfer) {
@@ -44,7 +49,7 @@ export class SelectionListBox {
       const elementJson = $event.dataTransfer.getData(PivickElementDragDropType);
       if (elementJson) {
         const element: PivickElement = JSON.parse(elementJson);
-        this.onElementDropped.emit([element, this.elements().length]);
+        this.onElementAdd.emit([element, this.elements().length]);
       }
     }
   }
@@ -64,5 +69,9 @@ export class SelectionListBox {
       }
     }
     return false;
+  }
+
+  removeElementFromSelection(element: PivickElement) {
+    this.onElementRemove.emit([element, this.elements().indexOf(element)]);
   }
 }

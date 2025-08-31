@@ -9,7 +9,9 @@
     <div class="flex-none"></div>
     <div class="flex-1"></div>
     <div class="flex-none">
-      <button class="btn btn-soft btn-error btn-xs"><ng-icon name="heroTrash"></ng-icon></button>
+      <button class="btn btn-soft btn-error btn-xs"
+              (click)="clearReport()"
+      ><ng-icon name="heroTrash"></ng-icon></button>
     </div>
   </div>
   <app-selection-list-box

@@ -91,4 +91,11 @@ export class PivickContent {
         },
       });
   }
+
+  clearReport() {
+    this.rows = [];
+    this.columns = [];
+    this.measures = [];
+    this.updateData();
+  }
 }

@@ -12,6 +12,9 @@
     class="p-2 pb-2 text-sm tracking-wide select-none hover:bg-accent hover:cursor-grab flex flex-row"
   >
     <span class="flex-1">{{element!.caption}}</span>
+    <button class="btn btn-xs btn-soft btn-error" (click)="removeElementFromSelection(element)">
+      <ng-icon name="heroXMark"></ng-icon>
+    </button>
   </li>
   }
 </ul>

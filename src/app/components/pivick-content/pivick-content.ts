@@ -48,10 +48,10 @@ export class PivickContent {
   }
 
   onElementDoubleClick($event: PivickElement) {
-    if (this.checkIfAlreadyInReport($event)) {
+    if (!$event || this.checkIfAlreadyInReport($event)) {
       return;
     }
-    if ($event!.type === 'measure') {
+    if ($event.type === 'measure') {
       this.measures = [...this.measures, $event as SelectedPivickElement];
     } else {
       this.rows = [...this.rows, $event as SelectedPivickElement];
@@ -60,12 +60,13 @@ export class PivickContent {
   }
 
   private checkIfAlreadyInReport(element: PivickElement): boolean {
+    if (!element) {
+      return false;
+    }
     return !!(
-      this.rows.find((e) => e?.name === element?.name && e?.granularity == element?.granularity) ||
-      this.columns.find(
-        (e) => e?.name === element?.name && e?.granularity == element?.granularity,
-      ) ||
-      this.measures.find((e) => e?.name === element?.name)
+      this.rows.find((e) => e.name === element.name && e.granularity === element.granularity) ||
+      this.columns.find((e) => e.name === element.name && e.granularity === element.granularity) ||
+      this.measures.find((e) => e.name === element.name)
     );
   }
 

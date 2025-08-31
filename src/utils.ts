@@ -37,12 +37,14 @@ export function transformDateToGranularString(
   const dateObj = new Date(date);
   let options: Intl.DateTimeFormatOptions = {};
   switch (granularity) {
-    case TimeGranularity.FULL:
+    case TimeGranularity.FULL: {
       return date;
-    case TimeGranularity.YEAR:
+    }
+    case TimeGranularity.YEAR: {
       options = { year: 'numeric' };
       return dateObj.toLocaleDateString(locale, options);
-    case TimeGranularity.QUARTER:
+    }
+    case TimeGranularity.QUARTER: {
       options = { month: 'numeric' };
       const month = parseInt(dateObj.toLocaleDateString(locale, options));
       options = { year: 'numeric' };
@@ -51,20 +53,25 @@ export function transformDateToGranularString(
       else if (month <= 6) return `${year} - Q2`;
       else if (month <= 9) return `${year} - Q3`;
       else return `${year} - Q4`;
-    case TimeGranularity.MONTH:
+    }
+    case TimeGranularity.MONTH: {
       options = { year: 'numeric', month: '2-digit' };
       return dateObj.toLocaleDateString(locale, options);
-    case TimeGranularity.WEEK:
+    }
+    case TimeGranularity.WEEK: {
       options = { year: 'numeric', month: '2-digit', day: '2-digit' };
       const dateString = dateObj.toLocaleDateString(locale, options);
       return `${dateString} - ${getWeek(dateObj)}`;
-    case TimeGranularity.DAY:
+    }
+    case TimeGranularity.DAY: {
       options = { year: 'numeric', month: '2-digit', day: '2-digit' };
       return dateObj.toLocaleDateString(locale, options);
-    case TimeGranularity.HOUR:
+    }
+    case TimeGranularity.HOUR: {
       options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit' };
       return dateObj.toLocaleDateString(locale, options);
-    case TimeGranularity.MINUTE:
+    }
+    case TimeGranularity.MINUTE: {
       options = { minute: '2-digit' };
       options = {
         year: 'numeric',
@@ -74,7 +81,8 @@ export function transformDateToGranularString(
         minute: '2-digit',
       };
       return dateObj.toLocaleDateString(locale, options);
-    case TimeGranularity.SECOND:
+    }
+    case TimeGranularity.SECOND: {
       options = {
         year: 'numeric',
         month: '2-digit',
@@ -84,5 +92,6 @@ export function transformDateToGranularString(
         second: '2-digit',
       };
       return dateObj.toLocaleDateString(locale, options);
+    }
   }
 }

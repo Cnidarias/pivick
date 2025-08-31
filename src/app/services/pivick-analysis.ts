@@ -3,12 +3,7 @@ import { CubeClient } from '@cubejs-client/ngx';
 import { Config } from './config';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Cube, Meta, Query, ResultSet, TCubeDimension, TCubeMeasure } from '@cubejs-client/core';
-import {
-  PivickElement,
-  PivickElementType,
-  SelectedPivickElement,
-  TimeGranularity,
-} from '../types/pivick-types';
+import { PivickElementType, SelectedPivickElement, TimeGranularity } from '../types/pivick-types';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
@@ -46,28 +41,26 @@ export class PivickAnalysis {
     const dimensions = [
       ...rows
         .filter(
-          (r) =>
-            r!.type === 'dimension' || (r!.type === 'timedimension' && r!.granularity === 'full'),
+          (r) => r.type === 'dimension' || (r.type === 'timedimension' && r.granularity === 'full'),
         )
-        .map((r) => r!.name),
+        .map((r) => r.name),
       ...cols
         .filter(
-          (c) =>
-            c!.type === 'dimension' || (c!.type === 'timedimension' && c!.granularity === 'full'),
+          (c) => c.type === 'dimension' || (c.type === 'timedimension' && c.granularity === 'full'),
         )
-        .map((c) => c!.name),
+        .map((c) => c.name),
     ];
 
     const timeDimensions = [
       ...rows
-        .filter((r) => r!.type === 'timedimension' && r!.granularity !== 'full')
+        .filter((r) => r.type === 'timedimension' && r.granularity !== 'full')
         .map((r) => {
-          return { dimension: r!.name, granularity: r!.granularity };
+          return { dimension: r.name, granularity: r.granularity };
         }),
     ];
 
     const query: Query = {
-      measures: measures.map((m) => m!.name),
+      measures: measures.map((m) => m.name),
       dimensions,
       timeDimensions,
       order: [],

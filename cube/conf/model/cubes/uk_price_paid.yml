@@ -1,7 +1,11 @@
 cubes:
     - name: uk_price_paid
-      sql_table: uk.uk_price_paid
+      # sql_table: uk.uk_price_paid
       data_source: default
+      sql: |
+        select *
+        FROM uk.uk_price_paid
+        WHERE date >= '2024-01-01'
 
       joins: []
 

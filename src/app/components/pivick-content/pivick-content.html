@@ -16,19 +16,22 @@
     type="row"
     [title]="'rows' | translate"
     [elements]="rows"
-    (onElementDropped)="onElementAdd($event, 'row')"
+    (onElementAdd)="onElementAdd($event, 'row')"
+    (onElementRemove)="onElementRemove($event, 'row')"
   ></app-selection-list-box>
   <app-selection-list-box
     type="column"
     [title]="'columns' | translate"
     [elements]="columns"
-    (onElementDropped)="onElementAdd($event, 'column')"
+    (onElementAdd)="onElementAdd($event, 'column')"
+    (onElementRemove)="onElementRemove($event, 'column')"
   ></app-selection-list-box>
   <app-selection-list-box
     type="measure"
     [title]="'measures' | translate"
     [elements]="measures"
-    (onElementDropped)="onElementAdd($event, 'measure')"
+    (onElementAdd)="onElementAdd($event, 'measure')"
+    (onElementRemove)="onElementRemove($event, 'measure')"
   ></app-selection-list-box>
 </div>
 <div class="divider divider-horizontal m-px w-[2px]!"></div>

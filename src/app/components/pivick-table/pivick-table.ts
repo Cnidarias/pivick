@@ -52,13 +52,14 @@ export class PivickTable {
 
   adjustDataForTimeDimensions() {
     this.rows()
-      .filter((r) => r!.type === 'timedimension')
+      .filter((r) => r !== undefined)
+      .filter((r) => r.type === 'timedimension')
       .forEach((r) => {
         const key = this.getKey(r);
         this.tableData.forEach((dataRow) => {
           dataRow[key] = transformDateToGranularString(
             dataRow[key] as string,
-            r!.granularity as TimeGranularity,
+            r.granularity as TimeGranularity,
           );
         });
       });
@@ -70,7 +71,9 @@ export class PivickTable {
   }
 
   isMeasureColumn(column: TableColumn): boolean {
-    return this.measures().some((m) => m!.name === column.key);
+    return this.measures()
+      .filter((m) => m !== undefined)
+      .some((m) => m.name === column.key);
   }
 
   getCaption(column: TableColumn) {

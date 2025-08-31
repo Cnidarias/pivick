@@ -1,9 +1,10 @@
 # Pivick UI
 
-Pivick UI is a frontend application for visualizing data using the [cube.dev](https://cube.dev/) ecosystem. 
+Pivick UI is a frontend application for visualizing data using the [cube.dev](https://cube.dev/) ecosystem.
 It provides an intuitive interface for interacting with Pivick services.
 
 ## Focus Points
+
 - **Data Visualization**: Leverages cube.dev for powerful data analytics and visualization.
 - **User Experience**: Designed with a focus on usability and performance.
 - **Data Exploration**: Allows non-technical users to explore and analyze data efficiently, not reliant on having a buisiness analysis create a complex dashboard
@@ -53,6 +54,7 @@ You should also have the backend services running. If you have Docker installed,
 ```bash
 docker-compose up -d
 ```
+
 This will start the necessary services, including Clickhouse and cube.dev.
 
 The app will be available at [http://localhost:4200](http://localhost:4200).

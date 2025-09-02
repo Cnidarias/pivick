@@ -1,5 +1,10 @@
-import { Component, inject, input, InputSignal } from '@angular/core';
-import { PivickElement, TimeGranularity } from '../../types/pivick-types';
+import { Component, inject, input, InputSignal, output, OutputEmitterRef } from '@angular/core';
+import {
+  OrderType,
+  PivickElement,
+  SelectedPivickElement,
+  TimeGranularity,
+} from '../../types/pivick-types';
 import { ResultSet, TableColumn } from '@cubejs-client/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { PivickAnalysis } from '../../services/pivick-analysis';
@@ -17,11 +22,14 @@ import { transformDateToGranularString } from '../../../utils';
 export class PivickTable {
   cubeName: InputSignal<string> = input.required<string>();
 
-  rows: InputSignal<PivickElement[]> = input.required<PivickElement[]>();
-  columns: InputSignal<PivickElement[]> = input.required<PivickElement[]>();
-  measures: InputSignal<PivickElement[]> = input.required<PivickElement[]>();
+  rows: InputSignal<SelectedPivickElement[]> = input.required<SelectedPivickElement[]>();
+  columns: InputSignal<SelectedPivickElement[]> = input.required<SelectedPivickElement[]>();
+  measures: InputSignal<SelectedPivickElement[]> = input.required<SelectedPivickElement[]>();
 
   data: InputSignal<ResultSet | undefined> = input.required<ResultSet | undefined>();
+
+  onElementSortChangeClick: OutputEmitterRef<SelectedPivickElement> =
+    output<SelectedPivickElement>();
 
   protected pivickAnalysis: PivickAnalysis = inject(PivickAnalysis);
 
@@ -88,4 +96,32 @@ export class PivickTable {
     }
     return this.pivickAnalysis.getCaptionByName(this.cubeName(), column.key);
   }
+
+  getSelectedPivickElementFromKey(column: TableColumn): SelectedPivickElement | undefined {
+    const parts = column.key.split('.');
+    const key = parts.length === 3 ? `${parts[0]}.${parts[1]}` : column.key;
+
+    const rowElement = this.rows().filter((r) => r.name === key);
+    if (rowElement.length > 0) {
+      return rowElement[0];
+    }
+    const columnElement = this.columns().filter((c) => c.name === key);
+    if (columnElement.length > 0) {
+      return columnElement[0];
+    }
+    const measureElement = this.measures().filter((m) => m.name === key);
+    if (measureElement.length > 0) {
+      return measureElement[0];
+    }
+    return undefined;
+  }
+
+  onTableHeaderClick($event: MouseEvent, element?: SelectedPivickElement) {
+    if (!element) {
+      return;
+    }
+    this.onElementSortChangeClick.emit(element);
+  }
+
+  protected readonly OrderType = OrderType;
 }

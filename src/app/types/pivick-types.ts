@@ -18,14 +18,12 @@ export enum TimeGranularity {
   SECOND = 'second',
 }
 
-export type PivickElement =
-  | {
-      caption: string;
-      granularity?: TimeGranularity;
-      name: string;
-      type: PivickElementType;
-    }
-  | undefined;
+export type PivickElement = {
+  caption: string;
+  granularity?: TimeGranularity;
+  name: string;
+  type: PivickElementType;
+};
 
 export type SelectedPivickElement = PivickElement & {
   orderIndex?: number;

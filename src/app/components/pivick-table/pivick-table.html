@@ -5,12 +5,15 @@
   <thead>
     <tr>
         @for (column of tableColumns; track column.key) {
+          @let element = getSelectedPivickElementFromKey(column);
           <th
             class="cursor-pointer items-center"
             [class]="{'bg-accent': !isMeasureColumn(column), 'text-accent-content': !isMeasureColumn(column), 'bg-info': isMeasureColumn(column), 'text-info-content': isMeasureColumn(column)}"
+            (click)="onTableHeaderClick($event, element)"
           >
-            @if (true) {
-                <ng-icon name="heroArrowLongUp"></ng-icon>
+            @if (element?.orderDirection) {
+                <ng-icon [name]="element?.orderDirection === OrderType.ASC ? 'heroArrowLongUp' : 'heroArrowLongDown'"></ng-icon>
+                <small>{{element?.orderIndex}}</small>
             }
             <span>
               {{getCaption(column)}}

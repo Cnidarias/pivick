@@ -21,7 +21,7 @@ import {
 
 interface Node<T> {
   caption: string;
-  data: T;
+  data?: T;
   key: string;
   visible: boolean;
   children?: Node<T>[];
@@ -183,7 +183,7 @@ export class ElementList implements OnInit {
     });
   }
 
-  onDragStart($event: DragEvent, element: PivickElement) {
+  onDragStart($event: DragEvent, element?: PivickElement) {
     if (!element) {
       return;
     }
@@ -195,7 +195,7 @@ export class ElementList implements OnInit {
     }
   }
 
-  onDoubleClick(_: MouseEvent, element: PivickElement) {
+  onDoubleClick(_: MouseEvent, element?: PivickElement) {
     if (!element) {
       return;
     }

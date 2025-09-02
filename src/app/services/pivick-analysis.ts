@@ -2,7 +2,17 @@ import { inject, Injectable } from '@angular/core';
 import { CubeClient } from '@cubejs-client/ngx';
 import { Config } from './config';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Cube, Meta, Query, ResultSet, TCubeDimension, TCubeMeasure } from '@cubejs-client/core';
+import {
+  Cube,
+  Meta,
+  Query,
+  QueryOrder,
+  ResultSet,
+  TCubeDimension,
+  TCubeMeasure,
+  TQueryOrderArray,
+  TQueryOrderObject,
+} from '@cubejs-client/core';
 import { PivickElementType, SelectedPivickElement, TimeGranularity } from '../types/pivick-types';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -59,11 +69,22 @@ export class PivickAnalysis {
         }),
     ];
 
+    const order: TQueryOrderArray = [...rows, ...cols, ...measures]
+      .filter((e) => e.orderDirection)
+      .sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0))
+      .map((e: SelectedPivickElement) => {
+        const nameKey = e.name;
+        const direction: QueryOrder = (
+          e.orderDirection ?? 'none'
+        ).toLocaleLowerCase() as QueryOrder;
+        return [nameKey, direction];
+      });
+
     const query: Query = {
       measures: measures.map((m) => m.name),
       dimensions,
       timeDimensions,
-      order: [],
+      order: order,
       total: true,
     };
 

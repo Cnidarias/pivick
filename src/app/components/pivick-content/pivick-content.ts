@@ -1,5 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { PivickElement, PivickSelector, SelectedPivickElement } from '../../types/pivick-types';
+import {
+  OrderType,
+  PivickElement,
+  PivickSelector,
+  SelectedPivickElement,
+} from '../../types/pivick-types';
 import { ElementList } from '../element-list/element-list';
 import { PivickTable } from '../pivick-table/pivick-table';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -29,33 +34,74 @@ export class PivickContent {
 
   onElementAdd($event: [PivickElement, idx: number], target: PivickSelector) {
     const [element, idx] = $event;
-    if (this.checkIfAlreadyInReport(element)) {
-      return;
-    }
-    const list = target === 'row' ? this.rows : target === 'column' ? this.columns : this.measures;
-    list.splice(idx, 0, element as SelectedPivickElement);
+    this.addElement(element, target, idx);
+  }
 
-    this.updateData();
+  onElementDoubleClick($event: PivickElement) {
+    const target: PivickSelector = $event.type === 'measure' ? 'measure' : 'row';
+    this.addElement($event, target);
   }
 
   onElementRemove($event: [PivickElement, idx: number], target: PivickSelector) {
     const [element, idx] = $event;
+    this.removeElement(idx, target);
+  }
 
+  addElement(element: PivickElement, target: PivickSelector, idx?: number) {
+    if (this.checkIfAlreadyInReport(element)) {
+      return;
+    }
+    const list = target === 'row' ? this.rows : target === 'column' ? this.columns : this.measures;
+
+    const maxCurrentSort = this._getMaximumCurrentSortOrder();
+
+    const selectedElement: SelectedPivickElement = {
+      ...element,
+      orderDirection: OrderType.DESC,
+      orderIndex: maxCurrentSort + 1,
+    };
+    idx = idx ?? list.length;
+    list.splice(idx, 0, selectedElement);
+
+    this.updateData();
+  }
+
+  removeElement(idx: number, target: PivickSelector) {
     let list = target === 'row' ? this.rows : target === 'column' ? this.columns : this.measures;
     list.splice(idx, 1);
 
     this.updateData();
   }
 
-  onElementDoubleClick($event: PivickElement) {
-    if (!$event || this.checkIfAlreadyInReport($event)) {
-      return;
-    }
-    if ($event.type === 'measure') {
-      this.measures = [...this.measures, $event as SelectedPivickElement];
+  changeElementSorting(element: SelectedPivickElement) {
+    if (element.orderDirection === OrderType.DESC) {
+      element.orderDirection = OrderType.ASC;
+    } else if (element.orderDirection === OrderType.ASC) {
+      // Since there is now one less element in the sorting we need to change all the others
+      this.rows.forEach((e) => {
+        if (e.orderIndex && element.orderIndex && e.orderIndex > element.orderIndex) {
+          e.orderIndex = e.orderIndex - 1;
+        }
+      });
+      this.columns.forEach((e) => {
+        if (e.orderIndex && element.orderIndex && e.orderIndex > element.orderIndex) {
+          e.orderIndex = e.orderIndex - 1;
+        }
+      });
+      this.measures.forEach((e) => {
+        if (e.orderIndex && element.orderIndex && e.orderIndex > element.orderIndex) {
+          e.orderIndex = e.orderIndex - 1;
+        }
+      });
+
+      element.orderDirection = undefined;
+      element.orderIndex = undefined;
     } else {
-      this.rows = [...this.rows, $event as SelectedPivickElement];
+      element.orderDirection = OrderType.DESC;
+      const maxCurrentSort = this._getMaximumCurrentSortOrder();
+      element.orderIndex = maxCurrentSort + 1;
     }
+
     this.updateData();
   }
 
@@ -90,6 +136,18 @@ export class PivickContent {
           this.isLoading = false;
         },
       });
+  }
+
+  private _getMaximumCurrentSortOrder(): number {
+    let maxCurrentSort = Math.max(
+      ...this.rows.map((m) => m.orderIndex ?? 0),
+      ...this.columns.map((m) => m.orderIndex ?? 0),
+      ...this.measures.map((m) => m.orderIndex ?? 0),
+    );
+    if (!Number.isFinite(maxCurrentSort)) {
+      maxCurrentSort = 0;
+    }
+    return maxCurrentSort;
   }
 
   clearReport() {

@@ -5,7 +5,7 @@
 </app-element-list>
 <div class="divider divider-horizontal m-px w-[2px]!"></div>
 <div>
-  <div class="navbar bg-base-100 shadow-sm min-h-[3rem]!">
+  <div class="navbar bg-base-100 shadow-sm min-h-[2rem]!">
     <div class="flex-none"></div>
     <div class="flex-1"></div>
     <div class="flex-none">
@@ -38,8 +38,12 @@
 </div>
 <div class="divider divider-horizontal m-px w-[2px]!"></div>
 <div class="flex-1 flex flex-col">
-  <div class="navbar bg-base-100 shadow-sm min-h-[3rem]!">
-    <div class="flex-none"></div>
+  <div class="navbar bg-base-100 shadow-sm min-h-[2rem]!">
+    <div class="flex-none">
+      <button class="btn btn-soft btn-error btn-xs"
+              (click)="clearReport()"
+      ><ng-icon name="heroTrash"></ng-icon></button>
+    </div>
     <div class="flex-1"></div>
     <div class="flex-none">
       @if (isLoading) {
@@ -49,6 +53,7 @@
     </div>
   </div>
   <app-pivick-table
+    class="pt-1"
     [cubeName]="selectedCubeName"
     [rows]="rows"
     [columns]="columns"

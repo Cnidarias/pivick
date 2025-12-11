@@ -1,6 +1,6 @@
-<h3>{{ title() }}</h3>
+<div class="p-1 pb-0 text-xs opacity-60 tracking-wide flex flex-row">{{ title() }}</div>
 <ul
-  class="list min-w-40 min-h-40 bg-base-100 rounded-box shadow-md overflow-auto border border-base-content/20 m-2 flex flex-col"
+  class="list min-w-40 min-h-40 bg-base-100 rounded-box shadow-md overflow-auto border border-base-content/20 m-1 flex flex-col mt-0"
   [ngClass]="elements().length === 0 ? 'justify-center' : 'justify-start'"
   (dragover)="onDragOver($event)"
   (drop)="onDrop($event)"
@@ -9,7 +9,7 @@
   <div class="self-center text-xs">empty</div>
   } @for (element of elements(); track $index) {
   <li
-    class="p-2 pb-2 text-sm tracking-wide select-none hover:bg-accent hover:cursor-grab flex flex-row"
+    class="p-1 pl-2 pr-2 text-sm tracking-wide select-none hover:bg-accent hover:cursor-grab flex flex-row"
   >
     <span class="flex-1">{{element!.caption}}</span>
     <button class="btn btn-xs btn-soft btn-error" (click)="removeElementFromSelection(element)">

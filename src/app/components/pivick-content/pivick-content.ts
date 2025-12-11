@@ -10,6 +10,7 @@ import { PivickTable } from '../pivick-table/pivick-table';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { SelectionListBox } from '../selection-list-box/selection-list-box';
 import { TranslatePipe } from '@ngx-translate/core';
+import { heroCog6Tooth } from '@ng-icons/heroicons/outline';
 import { heroTrash } from '@ng-icons/heroicons/outline';
 import { PivickAnalysis } from '../../services/pivick-analysis';
 import { ResultSet } from '@cubejs-client/core';
@@ -17,7 +18,7 @@ import { ResultSet } from '@cubejs-client/core';
 @Component({
   selector: 'app-pivick-content',
   imports: [ElementList, PivickTable, NgIcon, SelectionListBox, TranslatePipe],
-  providers: [provideIcons({ heroTrash })],
+  providers: [provideIcons({ heroCog6Tooth, heroTrash })],
   templateUrl: './pivick-content.html',
   styleUrl: './pivick-content.css',
 })

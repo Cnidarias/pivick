@@ -1,6 +1,6 @@
 <div class="p-1 pb-0 text-xs opacity-60 tracking-wide flex flex-row">{{ title() }}</div>
 <ul
-  class="list min-w-40 min-h-40 bg-base-100 rounded-box shadow-md overflow-auto border border-base-content/20 m-1 flex flex-col mt-0"
+  class="list min-w-40 min-h-8 bg-base-100 rounded-box shadow-md overflow-auto border border-base-content/20 m-1 flex flex-col mt-0"
   [ngClass]="elements().length === 0 ? 'justify-center' : 'justify-start'"
   (dragover)="onDragOver($event)"
   (drop)="onDrop($event)"

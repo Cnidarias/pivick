@@ -28,7 +28,7 @@
       @for (column of tableColumns; track column.key) {
         <td
           class="p-1"
-          [class]="{'bg-secondary/2': isMeasureColumn(column), 'bg-primary/2': !isMeasureColumn(column)}"
+          [class]="{'bg-secondary/10': isMeasureColumn(column), 'bg-primary/10': !isMeasureColumn(column)}"
         >
           {{row[column.key]}}
         </td>

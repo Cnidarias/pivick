@@ -7,8 +7,8 @@
         @for (column of tableColumns; track column.key) {
           @let element = getSelectedPivickElementFromKey(column);
           <th
-            class="cursor-pointer items-center"
-            [class]="{'bg-accent': !isMeasureColumn(column), 'text-accent-content': !isMeasureColumn(column), 'bg-info': isMeasureColumn(column), 'text-info-content': isMeasureColumn(column)}"
+            class="cursor-pointer items-center p-1"
+            [class]="{'bg-primary': !isMeasureColumn(column), 'text-primary-content': !isMeasureColumn(column), 'bg-secondary': isMeasureColumn(column), 'text-secondary-content': isMeasureColumn(column)}"
             (click)="onTableHeaderClick($event, element)"
           >
             @if (element?.orderDirection) {
@@ -24,10 +24,11 @@
   </thead>
   <tbody>
     @for (row of tableData; track $index) {
-    <tr class="hover:bg-accent-content hover:text-accent">
+    <tr class="hover:bg-primary-content hover:text-primary p-1">
       @for (column of tableColumns; track column.key) {
         <td
-          [class]="{'bg-info/5': isMeasureColumn(column), 'bg-accent/5': !isMeasureColumn(column)}"
+          class="p-1"
+          [class]="{'bg-secondary/2': isMeasureColumn(column), 'bg-primary/2': !isMeasureColumn(column)}"
         >
           {{row[column.key]}}
         </td>
